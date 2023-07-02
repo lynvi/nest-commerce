@@ -1,0 +1,244 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String            @id @default(cuid())
+  username          String?           @unique
+  password          String?
+  isGuest           Boolean           @default(true)
+  orders            Order[]
+  shippingAddresses ShippingAddress[]
+  phone             String?           @unique
+  email             String?           @unique
+  wishList          Wishlist?         @relation(fields: [wishlistId], references: [id])
+  wishlistId        String?           @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Collection {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  slug        String       @unique
+  description String?
+  children    Collection[] @relation("children")
+
+  parent     Collection? @relation("children", fields: [parentId], references: [id])
+  parentId   String?     @map("collectionId")
+  products   Product[]
+  seoContent String?
+}
+
+model Seller {
+  id       String    @id @default(cuid())
+  name     String
+  avatar   String?
+  rating   Float?
+  address  String?
+  website  String?
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderLine {
+  id               String         @id @default(cuid())
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariantId String
+  order            Order?         @relation(fields: [orderId], references: [id])
+  orderId          String?
+  quantity         Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([orderId, productVariantId])
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  slug        String  @unique
+  brand       Brand?  @relation(fields: [brandId], references: [id])
+  brandId     String?
+
+  image String?
+
+  productVariants ProductVariant[]
+
+  seller   Seller? @relation(fields: [sellerId], references: [id])
+  sellerId String?
+
+  wishlist   Wishlist? @relation(fields: [wishlistId], references: [id])
+  wishlistId String?
+
+  collections Collection[]
+  tags        Tag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wishlist {
+  id       String    @id @default(cuid())
+  products Product[]
+  user     User?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  products Product[]
+}
+
+model Brand {
+  id          String    @id @default(cuid())
+  logo        String
+  description String
+  name        String    @unique
+  products    Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductVariant {
+  id             String          @id @default(cuid())
+  name           String
+  image          String?
+  product        Product?        @relation(fields: [productId], references: [id])
+  productId      String?
+  price          Int
+  slug           String
+  stockLevel     Int             @default(1)
+  description    String
+  orderLines     OrderLine[]
+  productOptions ProductOption[]
+}
+
+model ProductOption {
+  id               String          @id @default(cuid())
+  name             String
+  value            String
+  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id])
+  productVariantId String?
+}
+
+model Order {
+  id            String         @id @default(cuid())
+  code          String
+  customer      User?          @relation(fields: [userId], references: [id])
+  userId        String?
+  status        OrderStatus
+  paymentMethod PaymentMethod?
+  paymentStatus PaymentStatus?
+  session       Session?
+  orderLines    OrderLine[]
+  appliedCoupon Coupon?        @relation(fields: [couponId], references: [id])
+  couponId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Coupon {
+  id           String     @id @default(cuid())
+  code         String
+  expiresAt    DateTime
+  maxUsageTime Int?       @default(0)
+  value        Int?
+  orders       Order[]
+  couponType   CouponType
+}
+
+model ShippingAddress {
+  id            String   @id @default(cuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  default       Boolean? @default(false)
+  city          String?
+  country       String?
+  zipCode       String?
+  streetAddress String?
+  phoneNumber   String?
+  firstName     String?
+  lastName      String?
+  email         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ShippingMethod {
+  id                 String           @id @default(cuid())
+  name               String
+  eligibilityCheck   EligibilityCheck @relation(fields: [eligibilityCheckId], references: [id])
+  eligibilityCheckId String
+}
+
+model EligibilityCheck {
+  id              String                   @id @default(cuid())
+  name            String
+  description     String
+  identifier      String
+  operator        EligibilityCheckOperator
+  shippingMethods ShippingMethod[]
+}
+
+model Session {
+  id          String   @id @default(cuid())
+  activeOrder Order?   @relation(fields: [orderId], references: [id])
+  orderId     String?  @unique
+  expiredAt   DateTime
+  userAgent   String?
+  ipAddress   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+  ACTIVE
+  CANCELED
+  SHIPPED
+  DELIVERED
+}
+
+enum EligibilityCheckOperator {
+  lt
+  gt
+  gte
+  lte
+  eq
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  CREDIT_CARD
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  REFUNDED
+}
+
+enum CouponType {
+  FREE_SHIPPING
+  DISCOUNT_ON_TOTAL
+}

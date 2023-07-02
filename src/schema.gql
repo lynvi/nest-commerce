@@ -1,0 +1,358 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Brand {
+  """Brand ID"""
+  id: ID!
+
+  """Brand name"""
+  name: String!
+
+  """Brand description"""
+  description: String!
+
+  """Brand logo"""
+  logo: String!
+}
+
+type Collection {
+  """collection id"""
+  id: ID!
+
+  """collection name"""
+  name: String!
+
+  """collection slug"""
+  slug: String!
+
+  """collection products"""
+  products: [Product!]!
+}
+
+type ProductVariant {
+  """Product variant id"""
+  id: ID!
+
+  """Product variant name"""
+  name: String!
+
+  """Product variant description"""
+  description: String!
+
+  """Product variant slug"""
+  slug: String!
+
+  """Product variant image"""
+  image: String!
+
+  """Product variant product id"""
+  productId: String!
+
+  """Product variant product id"""
+  price: Int!
+
+  """Product variant stocklevel"""
+  stockLevel: Int!
+}
+
+type Tag {
+  """Tag ID"""
+  id: ID!
+
+  """Tag name"""
+  name: String!
+
+  """Tag name"""
+  products: [Product!]
+}
+
+type Product {
+  """Id"""
+  id: String!
+
+  """Example field (placeholder)"""
+  name: String!
+
+  """product description"""
+  description: String!
+
+  """product image"""
+  image: String!
+  brand: Brand
+  seller: Brand
+  tags: [Tag!]
+  collections: [Collection!]
+  productVariants: [ProductVariant!]
+}
+
+type Coupon {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type OrderLine {
+  """order id"""
+  id: ID!
+
+  """product variant"""
+  productVariant: ProductVariant!
+
+  """quantity"""
+  quantity: ID!
+
+  """related order"""
+  order: Order!
+}
+
+type Order {
+  """order id"""
+  id: ID!
+
+  """order code"""
+  code: String!
+
+  """customer id"""
+  userId: ID!
+
+  """order status"""
+  status: OrderStatus!
+
+  """order lines"""
+  orderLines: [OrderLine!]!
+
+  """applied coupons"""
+  appliedCoupon: [Coupon!]
+}
+
+enum OrderStatus {
+  ACTIVE
+  CANCELED
+  SHIPPED
+  DELIVERED
+}
+
+type Query {
+  products(filterProductInput: FilterProductInput): [Product!]!
+  product(id: String!): Product!
+  brands: [Brand!]!
+  brand(id: String!): Brand!
+  tags: [Tag!]!
+  tag(id: String!): Tag!
+  collections: [Collection!]!
+  collection(id: Int!): Collection!
+  orders: [Order!]!
+  order(id: String!): Order!
+  activeOrder: Order
+  productVariants: [ProductVariant!]!
+  productVariant(id: Int!): ProductVariant!
+  coupons: [Coupon!]!
+  coupon(id: Int!): Coupon!
+}
+
+input FilterProductInput {
+  """Products by collection slug"""
+  collectionSlug: String
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createBrand(createBrandInput: CreateBrandInput!): Brand!
+  updateBrand(id: String!, updateBrandInput: UpdateBrandInput!): Brand!
+  removeBrand(id: String!): Brand!
+  createTag(createTagInput: CreateTagInput!): Tag!
+  updateTag(updateTagInput: UpdateTagInput!): Tag!
+  removeTag(id: Int!): Tag!
+  createCollection(createCollectionInput: CreateCollectionInput!): Collection!
+  updateCollection(updateCollectionInput: UpdateCollectionInput!): Collection!
+  removeCollection(id: Int!): Collection!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: String!): Order!
+  addToCart(addToCartInput: AddToCartInput!): Order!
+  createProductVariant(createProductVariantInput: CreateProductVariantInput!): ProductVariant!
+  updateProductVariant(updateProductVariantInput: UpdateProductVariantInput!): ProductVariant!
+  removeProductVariant(id: Int!): ProductVariant!
+  createCoupon(createCouponInput: CreateCouponInput!): Coupon!
+  updateCoupon(updateCouponInput: UpdateCouponInput!): Coupon!
+  removeCoupon(id: Int!): Coupon!
+}
+
+input CreateProductInput {
+  """Product name"""
+  name: String!
+
+  """Product slug"""
+  slug: String!
+
+  """Product description"""
+  description: String!
+
+  """Product brand id"""
+  brandId: String!
+
+  """Product tags"""
+  tags: [String!]!
+
+  """collection ids"""
+  collectionIds: [String!]
+}
+
+input UpdateProductInput {
+  """Product name"""
+  name: String
+
+  """Product slug"""
+  slug: String
+
+  """Product description"""
+  description: String
+
+  """Product brand id"""
+  brandId: String
+
+  """Product tags"""
+  tags: [String!]
+
+  """collection ids"""
+  collectionIds: [String!]
+  id: Int!
+}
+
+input CreateBrandInput {
+  """Brand name"""
+  name: String!
+
+  """Brand description"""
+  description: String!
+
+  """Brand logo"""
+  logo: String!
+}
+
+input UpdateBrandInput {
+  """Brand name"""
+  name: String
+
+  """Brand description"""
+  description: String
+
+  """Brand logo"""
+  logo: String
+}
+
+input CreateTagInput {
+  """Tag name"""
+  name: String!
+}
+
+input UpdateTagInput {
+  """Tag name"""
+  name: String
+  id: Int!
+}
+
+input CreateCollectionInput {
+  """collection name"""
+  name: String!
+
+  """collection desc"""
+  description: String
+
+  """collection slug"""
+  slug: String
+}
+
+input UpdateCollectionInput {
+  """collection name"""
+  name: String
+
+  """collection desc"""
+  description: String
+
+  """collection slug"""
+  slug: String
+  id: Int!
+}
+
+input CreateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: String!
+}
+
+input AddToCartInput {
+  """order id"""
+  orderId: ID
+
+  """Product variant id"""
+  productVariantId: ID!
+
+  """quantity"""
+  quantity: Int = 1
+}
+
+input CreateProductVariantInput {
+  """Product variant name"""
+  name: String!
+
+  """Product variant description"""
+  description: String!
+
+  """Product variant image"""
+  image: String!
+
+  """Product variant slug"""
+  slug: String!
+
+  """Product variant product id"""
+  productId: String!
+
+  """Product variant product id"""
+  price: Int!
+
+  """Product variant stocklevel"""
+  stockLevel: Int!
+}
+
+input UpdateProductVariantInput {
+  """Product variant name"""
+  name: String
+
+  """Product variant description"""
+  description: String
+
+  """Product variant image"""
+  image: String
+
+  """Product variant slug"""
+  slug: String
+
+  """Product variant product id"""
+  productId: String
+
+  """Product variant product id"""
+  price: Int
+
+  """Product variant stocklevel"""
+  stockLevel: Int
+  id: Int!
+}
+
+input CreateCouponInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCouponInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
