@@ -1,19 +1,19 @@
 import {
-  Resolver,
-  Query,
-  Mutation,
   Args,
   Context,
-  GqlExecutionContext,
   Info,
+  Mutation,
+  Query,
+  Resolver,
 } from '@nestjs/graphql';
-import { OrdersService } from './orders.service';
-import { Order } from './entities/order.entity';
-import { CreateOrderInput } from './dto/create-order.input';
-import { UpdateOrderInput } from './dto/update-order.input';
-import { AddToCartInput } from './dto/add-to-cart.input';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { GraphQLResolveInfo } from 'graphql';
+import { AddCustomerToOrderInput } from './dto/add-customer.input';
+import { AddToCartInput } from './dto/add-to-cart.input';
+import { CreateOrderInput } from './dto/create-order.input';
+import { UpdateOrderInput } from './dto/update-order.input';
+import { Order } from './entities/order.entity';
+import { OrdersService } from './orders.service';
 
 @Resolver(() => Order)
 export class OrdersResolver {
@@ -57,6 +57,22 @@ export class OrdersResolver {
       addToCartInput,
       request,
       reply,
+      info,
+    );
+  }
+
+  @Mutation(() => Order, { nullable: true })
+  async addCustomerToOrder(
+    @Context() context,
+    @Args('addCustomerToOrderInput')
+    addCustomerToOrderInput: AddCustomerToOrderInput,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const request = context.req as FastifyRequest;
+
+    return await this.ordersService.addCustomerToOrder(
+      addCustomerToOrderInput,
+      request,
       info,
     );
   }

@@ -11,16 +11,17 @@ datasource db {
 }
 
 model User {
-  id                String            @id @default(cuid())
-  username          String?           @unique
-  password          String?
-  isGuest           Boolean           @default(true)
-  orders            Order[]
-  shippingAddresses ShippingAddress[]
-  phone             String?           @unique
-  email             String?           @unique
-  wishList          Wishlist?         @relation(fields: [wishlistId], references: [id])
-  wishlistId        String?           @unique
+  id              String           @id @default(cuid())
+  firstName       String?
+  lastName        String?
+  password        String?
+  isGuest         Boolean          @default(true)
+  orders          Order[]
+  shippingDetails ShippingDetail[]
+  phone           String?          @unique
+  email           String?          @unique
+  wishList        Wishlist?        @relation(fields: [wishlistId], references: [id])
+  wishlistId      String?          @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -32,11 +33,10 @@ model Collection {
   slug        String       @unique
   description String?
   children    Collection[] @relation("children")
-
-  parent     Collection? @relation("children", fields: [parentId], references: [id])
-  parentId   String?     @map("collectionId")
-  products   Product[]
-  seoContent String?
+  parent      Collection?  @relation("children", fields: [parentId], references: [id])
+  parentId    String?      @map("collectionId")
+  products    Product[]
+  seoContent  String?
 }
 
 model Seller {
@@ -123,7 +123,7 @@ model ProductVariant {
   image          String?
   product        Product?        @relation(fields: [productId], references: [id])
   productId      String?
-  price          Int
+  price          Int             @default(0)
   slug           String
   stockLevel     Int             @default(1)
   description    String
@@ -151,6 +151,7 @@ model Order {
   orderLines    OrderLine[]
   appliedCoupon Coupon?        @relation(fields: [couponId], references: [id])
   couponId      String?
+  total         Int?           @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -166,7 +167,7 @@ model Coupon {
   couponType   CouponType
 }
 
-model ShippingAddress {
+model ShippingDetail {
   id            String   @id @default(cuid())
   user          User     @relation(fields: [userId], references: [id])
   userId        String
@@ -227,6 +228,14 @@ enum EligibilityCheckOperator {
   eq
 }
 
+model Setting {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String
+  type        SettingType @default(NUMBER)
+  value       String
+}
+
 enum PaymentMethod {
   CASH_ON_DELIVERY
   CREDIT_CARD
@@ -241,4 +250,10 @@ enum PaymentStatus {
 enum CouponType {
   FREE_SHIPPING
   DISCOUNT_ON_TOTAL
+}
+
+enum SettingType {
+  BOOLEAN
+  STRING
+  NUMBER
 }

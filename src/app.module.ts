@@ -14,6 +14,7 @@ import { CouponsModule } from './coupons/coupons.module';
 import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from './config/config.schema';
 import { config } from './config';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { config } from './config';
     OrdersModule,
     ProductVariantsModule,
     CouponsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

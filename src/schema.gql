@@ -105,6 +105,23 @@ type OrderLine {
   order: Order!
 }
 
+type User {
+  """"""
+  firstName: String
+
+  """"""
+  lastName: String
+
+  """"""
+  email: String!
+
+  """"""
+  isGuest: Boolean
+
+  """"""
+  phone: String
+}
+
 type Order {
   """order id"""
   id: ID!
@@ -123,6 +140,12 @@ type Order {
 
   """applied coupons"""
   appliedCoupon: [Coupon!]
+
+  """order customer"""
+  customer: User
+
+  """order total price"""
+  total: Int
 }
 
 enum OrderStatus {
@@ -148,6 +171,8 @@ type Query {
   productVariant(id: Int!): ProductVariant!
   coupons: [Coupon!]!
   coupon(id: Int!): Coupon!
+  users: [User!]!
+  user(id: Int!): User!
 }
 
 input FilterProductInput {
@@ -172,12 +197,16 @@ type Mutation {
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: String!): Order!
   addToCart(addToCartInput: AddToCartInput!): Order!
+  addCustomerToOrder(addCustomerToOrderInput: AddCustomerToOrderInput!): Order
   createProductVariant(createProductVariantInput: CreateProductVariantInput!): ProductVariant!
   updateProductVariant(updateProductVariantInput: UpdateProductVariantInput!): ProductVariant!
   removeProductVariant(id: Int!): ProductVariant!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   updateCoupon(updateCouponInput: UpdateCouponInput!): Coupon!
   removeCoupon(id: Int!): Coupon!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
 }
 
 input CreateProductInput {
@@ -299,6 +328,17 @@ input AddToCartInput {
   quantity: Int = 1
 }
 
+input AddCustomerToOrderInput {
+  """"""
+  firstName: String
+
+  """"""
+  lastName: String
+
+  """"""
+  email: String
+}
+
 input CreateProductVariantInput {
   """Product variant name"""
   name: String!
@@ -352,6 +392,17 @@ input CreateCouponInput {
 }
 
 input UpdateCouponInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

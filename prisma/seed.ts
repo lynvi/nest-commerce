@@ -1,12 +1,25 @@
 import { PrismaClient } from '@prisma/client';
-import * as dotenv from 'dotenv';
-import { seedData } from './data';
 import { nanoid } from 'nanoid';
+import { seedData } from './data';
 
 const prisma = new PrismaClient();
 
+const seedSettings = async () => {
+  await prisma.setting.create({
+    data: {
+      name: 'lowStockThreshold',
+      type: 'NUMBER',
+      value: '10',
+      description:
+        'notify store admin that the stock level of specific product variant is running short',
+    },
+  });
+};
+
 async function main() {
   console.log('Seeding...');
+
+  await seedSettings();
 
   /// --------- Brands ---------------
 
@@ -55,11 +68,14 @@ async function main() {
         paymentMethod: 'CASH_ON_DELIVERY',
         customer: {
           create: {
-            username: 'abdelabou',
+            firstName: 'Abdelkader',
+            lastName: 'Aboukinane',
+            email: 'aboukinanee@gmail.com',
             isGuest: true,
-            shippingAddresses: {
+            shippingDetails: {
               create: {
                 zipCode: '24000',
+
                 city: 'El jadida',
                 country: 'Morocco',
                 streetAddress: 'Ibrahim alkhalil route sidi bouzid',

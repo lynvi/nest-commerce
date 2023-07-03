@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaSelect } from '@paljs/plugins';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { GraphQLResolveInfo } from 'graphql';
+import { customAlphabet } from 'nanoid';
+import { PrismaService } from 'nestjs-prisma';
+import { AddCustomerToOrderInput } from './dto/add-customer.input';
+import { AddToCartInput } from './dto/add-to-cart.input';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
-import { AddToCartInput } from './dto/add-to-cart.input';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { nanoid, customAlphabet } from 'nanoid';
-import { PrismaService } from 'nestjs-prisma';
-import { GraphQLResolveInfo } from 'graphql';
-import { PrismaSelect } from '@paljs/plugins';
+import { Session } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
@@ -43,16 +45,26 @@ export class OrdersService {
       '1234567890qwertyuiopasdfghjklzxcvbnQWERTYUIOP;LKJHGFDSAZXCVBN',
       10,
     );
+    const productVariant = await this.prismaService.productVariant.findUnique({
+      where: { id: addToCartInput.productVariantId },
+    });
+
+    if (!productVariant) {
+      throw new NotFoundException('Product variant not found');
+    }
 
     const sessionId = request.cookies['session'];
     const session = await this.prismaService.session.findUnique({
-      include: { activeOrder: true },
+      include: { activeOrder: { include: { orderLines: true } } },
       where: { id: sessionId || '' },
     });
 
     const randomString = nanoid(80);
 
     if (!session) {
+      if (productVariant.stockLevel < addToCartInput.quantity) {
+        throw new Error('Insufisant stock');
+      }
       const order = await this.prismaService.order.create({
         select: { ...select.select, id: true },
         data: {
@@ -64,6 +76,8 @@ export class OrdersService {
               productVariantId: addToCartInput.productVariantId,
             },
           },
+
+          total: productVariant.price * addToCartInput.quantity,
         },
       });
 
@@ -88,6 +102,14 @@ export class OrdersService {
       return order;
     }
 
+    const quantity = session.activeOrder.orderLines.find(
+      (item) => item.productVariantId === addToCartInput.productVariantId,
+    ).quantity;
+
+    if (productVariant.stockLevel < addToCartInput.quantity + quantity) {
+      throw new Error('insufisant stock');
+    }
+
     return await this.prismaService.order.upsert({
       where: { id: session.orderId || '' },
       ...select,
@@ -100,6 +122,7 @@ export class OrdersService {
             productVariantId: addToCartInput.productVariantId,
           },
         },
+        total: productVariant.price * addToCartInput.quantity,
       },
 
       update: {
@@ -120,6 +143,7 @@ export class OrdersService {
             },
           },
         },
+        total: { increment: productVariant.price * addToCartInput.quantity },
       },
     });
   }
@@ -133,5 +157,50 @@ export class OrdersService {
     });
 
     return session?.activeOrder;
+  }
+
+  async addCustomerToOrder(
+    addCustomerInput: AddCustomerToOrderInput,
+    request: FastifyRequest,
+    info: GraphQLResolveInfo,
+  ) {
+    const sessionId = request.cookies['session'];
+    const select = new PrismaSelect(info).value;
+
+    const session = await this.prismaService.session.findUnique({
+      include: { activeOrder: { ...select } },
+      where: { id: sessionId || '' },
+    });
+
+    if (!session?.activeOrder) {
+      return null;
+    }
+    const { email, lastName, firstName } = addCustomerInput;
+
+    await this.prismaService.user.updateMany({
+      where: { email },
+      data: addCustomerInput,
+    });
+
+    const order = await this.prismaService.order.update({
+      ...select,
+      where: { id: session?.activeOrder?.id },
+      data: {
+        customer: {
+          connectOrCreate: {
+            create: {
+              firstName,
+              lastName,
+              email,
+            },
+            where: {
+              email,
+            },
+          },
+        },
+      },
+    });
+
+    return order;
   }
 }
