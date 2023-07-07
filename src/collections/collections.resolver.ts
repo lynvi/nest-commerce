@@ -21,9 +21,13 @@ export class CollectionsResolver {
     return this.collectionsService.findAll(info);
   }
 
-  @Query(() => Collection, { name: 'collection' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.collectionsService.findOne(id);
+  @Query(() => Collection, { name: 'collection', nullable: true })
+  findOne(
+    @Info() info: GraphQLResolveInfo,
+    @Args('id', { type: () => String, nullable: true }) id: string,
+    @Args('slug', { type: () => String, nullable: true }) slug: string,
+  ) {
+    return this.collectionsService.findOne(info, id, slug);
   }
 
   @Mutation(() => Collection)

@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { nanoid } from 'nanoid';
 import { seedData } from './data';
+import slugify from 'slugify';
 
 const prisma = new PrismaClient();
 
@@ -43,54 +44,57 @@ async function main() {
 
   const products = seedData.products;
   for (let i = 0; i < products.length; i++) {
+    const { collectionIds, price, ...product } = products[i];
     await prisma.product.create({
       data: {
-        ...products[i],
+        ...product,
         collections: {
-          connect: { id: 'protein' },
+          connect: [...collectionIds.map((item) => ({ id: item }))],
         },
-      },
-    });
-
-    /// --------- Product variants ---------------
-    const productVariants = seedData.productVariants;
-    for (let i = 0; i < productVariants.length; i++) {
-      await prisma.productVariant.create({
-        data: productVariants[i],
-      });
-    }
-
-    await prisma.order.create({
-      data: {
-        code: nanoid(10).toUpperCase(),
-        status: 'ACTIVE',
-        paymentStatus: 'PENDING',
-        paymentMethod: 'CASH_ON_DELIVERY',
-        customer: {
+        productVariants: {
           create: {
-            firstName: 'Abdelkader',
-            lastName: 'Aboukinane',
-            email: 'aboukinanee@gmail.com',
-            isGuest: true,
-            shippingDetails: {
-              create: {
-                zipCode: '24000',
-
-                city: 'El jadida',
-                country: 'Morocco',
-                streetAddress: 'Ibrahim alkhalil route sidi bouzid',
-              },
-            },
-          },
-        },
-        orderLines: {
-          create: {
-            quantity: 10,
-            productVariantId: 'gold-standard-banana',
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            slug: slugify(product.slug),
+            price,
+            stockLevel: 120,
           },
         },
       },
     });
+
+    // await prisma.order.create({
+    //   data: {
+    //     code: nanoid(10).toUpperCase(),
+    //     status: 'ACTIVE',
+    //     paymentStatus: 'PENDING',
+    //     paymentMethod: 'CASH_ON_DELIVERY',
+    //     customer: {
+    //       create: {
+    //         firstName: 'Abdelkader',
+    //         lastName: 'Aboukinane',
+    //         email: 'aboukinaneee@gmail.com',
+    //         isGuest: true,
+    //         shippingDetails: {
+    //           create: {
+    //             zipCode: '24000',
+
+    //             city: 'El jadida',
+    //             country: 'Morocco',
+    //             streetAddress: 'Ibrahim alkhalil route sidi bouzid',
+    //           },
+    //         },
+    //       },
+    //     },
+    //     orderLines: {
+    //       create: {
+    //         quantity: 10,
+    //         productVariantId: 'GOLD-STANDARD',
+    //       },
+    //     },
+    //   },
+    // });
   }
 }
 

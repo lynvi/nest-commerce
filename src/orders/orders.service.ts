@@ -50,7 +50,7 @@ export class OrdersService {
     });
 
     if (!productVariant) {
-      throw new NotFoundException('Product variant not found');
+      return new NotFoundException('Product variant not found');
     }
 
     const sessionId = request.cookies['session'];
@@ -63,7 +63,7 @@ export class OrdersService {
 
     if (!session) {
       if (productVariant.stockLevel < addToCartInput.quantity) {
-        throw new Error('Insufisant stock');
+        return new Error('Insufisant stock');
       }
       const order = await this.prismaService.order.create({
         select: { ...select.select, id: true },
@@ -107,7 +107,7 @@ export class OrdersService {
     ).quantity;
 
     if (productVariant.stockLevel < addToCartInput.quantity + quantity) {
-      throw new Error('insufisant stock');
+      return new Error('insufisant stock');
     }
 
     return await this.prismaService.order.upsert({

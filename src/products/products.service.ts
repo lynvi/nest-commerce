@@ -1,16 +1,15 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
 import { Prisma } from '@prisma/client';
 import { GraphQLResolveInfo } from 'graphql';
 import { PrismaService } from 'nestjs-prisma';
-import slugify from 'slugify';
 import { CreateProductInput } from './dto/create-product.input';
-import { UpdateProductInput } from './dto/update-product.input';
 import { FilterProductInput } from './dto/filter-product.input';
+import { UpdateProductInput } from './dto/update-product.input';
 
 @Injectable()
 export class ProductsService {
@@ -65,19 +64,71 @@ export class ProductsService {
     });
   }
 
-  findOne(id: string, info: GraphQLResolveInfo) {
+  findOne(info: GraphQLResolveInfo, id?: string, slug?: string) {
     const select = new PrismaSelect(info).value;
-    return this.prismaService.product.findUnique({
-      where: { id },
+    return this.prismaService.product.findFirst({
+      where: { OR: [{ id, slug }] },
       ...select,
     });
   }
 
-  update(id: number, updateProductInput: UpdateProductInput) {
-    return `This action updates a #${id} product`;
+  update(
+    id: string,
+    updateProductInput: UpdateProductInput,
+    info: GraphQLResolveInfo,
+  ) {
+    const select = new PrismaSelect(info).value;
+    return this.prismaService.product.update({
+      where: { id },
+      ...select,
+      data: updateProductInput,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    try {
+      return await this.prismaService.product.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(error.code.substring(1));
+        switch (error.code) {
+          case 'P2025': {
+            throw new NotFoundException();
+          }
+          default:
+        }
+      }
+    }
   }
 }
+
+const PrimaErrorCodeMapping = (code: string) => {
+  //https://www.prisma.io/docs/reference/api-reference/error-reference#prisma-client-query-engine
+
+  console.log(code.substring(1));
+
+  switch (code) {
+    case 'P2025': {
+      throw new NotFoundException();
+    }
+    case 'P2000': {
+      throw new NotFoundException();
+    }
+    case 'P2001': {
+      throw new NotFoundException();
+    }
+    case 'P2002': {
+      //
+      throw new BadRequestException(409);
+    }
+    case 'P2025': {
+      throw new NotFoundException();
+    }
+    case 'P2025': {
+      throw new NotFoundException();
+    }
+    default:
+  }
+};

@@ -8,13 +8,16 @@ export class ProductVariant {
   @Field(() => String, { description: 'Product variant name' })
   name: string;
 
-  @Field(() => String, { description: 'Product variant description' })
+  @Field(() => String, {
+    description: 'Product variant description',
+    nullable: true,
+  })
   description: string;
 
-  @Field(() => String, { description: 'Product variant slug' })
+  @Field(() => String, { description: 'Product variant slug', nullable: true })
   slug: string;
 
-  @Field(() => String, { description: 'Product variant image' })
+  @Field(() => String, { description: 'Product variant image', nullable: true })
   image: string;
 
   @Field(() => String, { description: 'Product variant product id' })

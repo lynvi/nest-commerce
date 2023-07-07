@@ -28,8 +28,12 @@ export class CollectionsService {
     return this.prismaService.collection.findMany({ ...select });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} collection`;
+  findOne(info: GraphQLResolveInfo, id?: string, slug?: string) {
+    const select = new PrismaSelect(info).value;
+    return this.prismaService.collection.findFirst({
+      ...select,
+      where: { OR: [{ id, slug }] },
+    });
   }
 
   update(id: number, updateCollectionInput: UpdateCollectionInput) {

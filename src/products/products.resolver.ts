@@ -27,26 +27,29 @@ export class ProductsResolver {
     return this.productsService.findAll(info, filter);
   }
 
-  @Query(() => Product, { name: 'product' })
+  @Query(() => Product, { name: 'product', nullable: true })
   findOne(
-    @Args('id', { type: () => String }) id: string,
     @Info() info: GraphQLResolveInfo,
+    @Args('id', { type: () => String, nullable: true }) id: string,
+    @Args('slug', { type: () => String, nullable: true }) slug: string,
   ) {
-    return this.productsService.findOne(id, info);
+    return this.productsService.findOne(info, id, slug);
   }
 
   @Mutation(() => Product)
   updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
+    @Info() info: GraphQLResolveInfo,
   ) {
     return this.productsService.update(
       updateProductInput.id,
       updateProductInput,
+      info,
     );
   }
 
   @Mutation(() => Product)
-  removeProduct(@Args('id', { type: () => Int }) id: number) {
+  removeProduct(@Args('id', { type: () => String }) id: string) {
     return this.productsService.remove(id);
   }
 }

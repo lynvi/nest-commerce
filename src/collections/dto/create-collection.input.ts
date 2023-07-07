@@ -8,6 +8,6 @@ export class CreateCollectionInput {
   @Field(() => String, { description: 'collection desc', nullable: true })
   description: string;
 
-  @Field(() => String, { description: 'collection slug', nullable: true })
+  @Field(() => String, { description: 'collection slug', nullable: false })
   slug: string;
 }

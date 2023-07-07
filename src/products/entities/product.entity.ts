@@ -12,10 +12,13 @@ export class Product {
   @Field(() => String, { description: 'Example field (placeholder)' })
   name: string;
 
-  @Field(() => String, { description: 'product description' })
+  @Field(() => String, { description: 'Product slug' })
+  slug: string;
+
+  @Field(() => String, { description: 'product description', nullable: true })
   description: string;
 
-  @Field(() => String, { description: 'product image' })
+  @Field(() => String, { description: 'product image', nullable: true })
   image: string;
 
   @Field((type) => Brand, { nullable: true })

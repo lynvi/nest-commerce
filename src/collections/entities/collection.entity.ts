@@ -12,6 +12,21 @@ export class Collection {
   @Field(() => String, { description: 'collection slug' })
   slug: string;
 
+  @Field(() => Int, { description: 'collection position' })
+  position: number;
+
+  @Field(() => String, { description: 'collection desc' })
+  description: string;
+
+  @Field(() => Collection, { description: 'Parent collection', nullable: true })
+  parent?: Collection;
+
+  @Field(() => [Collection], {
+    description: 'Collection childs',
+    nullable: true,
+  })
+  children?: Collection[];
+
   @Field(() => [Product], { description: 'collection products' })
   products: Product[];
 }

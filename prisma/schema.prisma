@@ -32,6 +32,7 @@ model Collection {
   name        String       @unique
   slug        String       @unique
   description String?
+  position    Int?         @default(0)
   children    Collection[] @relation("children")
   parent      Collection?  @relation("children", fields: [parentId], references: [id])
   parentId    String?      @map("collectionId")
@@ -74,8 +75,7 @@ model Product {
   brand       Brand?  @relation(fields: [brandId], references: [id])
   brandId     String?
 
-  image String?
-
+  image           String?
   productVariants ProductVariant[]
 
   seller   Seller? @relation(fields: [sellerId], references: [id])

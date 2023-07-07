@@ -26,6 +26,18 @@ type Collection {
   """collection slug"""
   slug: String!
 
+  """collection position"""
+  position: Int!
+
+  """collection desc"""
+  description: String!
+
+  """Parent collection"""
+  parent: Collection
+
+  """Collection childs"""
+  children: [Collection!]
+
   """collection products"""
   products: [Product!]!
 }
@@ -38,13 +50,13 @@ type ProductVariant {
   name: String!
 
   """Product variant description"""
-  description: String!
+  description: String
 
   """Product variant slug"""
-  slug: String!
+  slug: String
 
   """Product variant image"""
-  image: String!
+  image: String
 
   """Product variant product id"""
   productId: String!
@@ -74,11 +86,14 @@ type Product {
   """Example field (placeholder)"""
   name: String!
 
+  """Product slug"""
+  slug: String!
+
   """product description"""
-  description: String!
+  description: String
 
   """product image"""
-  image: String!
+  image: String
   brand: Brand
   seller: Brand
   tags: [Tag!]
@@ -157,13 +172,13 @@ enum OrderStatus {
 
 type Query {
   products(filterProductInput: FilterProductInput): [Product!]!
-  product(id: String!): Product!
+  product(id: String, slug: String): Product
   brands: [Brand!]!
   brand(id: String!): Brand!
   tags: [Tag!]!
   tag(id: String!): Tag!
   collections: [Collection!]!
-  collection(id: Int!): Collection!
+  collection(id: String, slug: String): Collection
   orders: [Order!]!
   order(id: String!): Order!
   activeOrder: Order
@@ -183,7 +198,7 @@ input FilterProductInput {
 type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
-  removeProduct(id: Int!): Product!
+  removeProduct(id: String!): Product!
   createBrand(createBrandInput: CreateBrandInput!): Brand!
   updateBrand(id: String!, updateBrandInput: UpdateBrandInput!): Brand!
   removeBrand(id: String!): Brand!
@@ -247,7 +262,7 @@ input UpdateProductInput {
 
   """collection ids"""
   collectionIds: [String!]
-  id: Int!
+  id: String!
 }
 
 input CreateBrandInput {
@@ -291,7 +306,7 @@ input CreateCollectionInput {
   description: String
 
   """collection slug"""
-  slug: String
+  slug: String!
 }
 
 input UpdateCollectionInput {
