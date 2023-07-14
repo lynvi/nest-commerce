@@ -31,7 +31,7 @@ COPY --from=builder /usr/app/package*.json ./
 COPY --from=builder /usr/app/prisma ./prisma
 
 
-COPY .env .
+#COPY .env .
 
 
 EXPOSE 4000
