@@ -1,20 +1,23 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PrismaModule } from 'nestjs-prisma';
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
-import { ProductsModule } from './products/products.module';
+import { PrismaModule } from 'nestjs-prisma';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { BrandsModule } from './brands/brands.module';
-import { TagsModule } from './tags/tags.module';
 import { CollectionsModule } from './collections/collections.module';
+import { config } from './config';
+import { validationSchema } from './config/config.schema';
+import { CouponsModule } from './coupons/coupons.module';
 import { OrdersModule } from './orders/orders.module';
 import { ProductVariantsModule } from './product-variants/product-variants.module';
-import { CouponsModule } from './coupons/coupons.module';
-import { ConfigModule } from '@nestjs/config';
-import { validationSchema } from './config/config.schema';
-import { config } from './config';
+import { ProductsModule } from './products/products.module';
+import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
+import { AssetsModule } from './assets/assets.module';
+import { ShippingDetailsModule } from './shipping-details/shipping-details.module';
+import { GlobalHttpModule } from './global-http.module';
 
 @Module({
   imports: [
@@ -23,6 +26,8 @@ import { UsersModule } from './users/users.module';
       validationSchema,
       load: [config],
     }),
+
+    GlobalHttpModule,
     PrismaModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<MercuriusDriverConfig>({
       driver: MercuriusDriver,
@@ -39,6 +44,8 @@ import { UsersModule } from './users/users.module';
     ProductVariantsModule,
     CouponsModule,
     UsersModule,
+    AssetsModule,
+    ShippingDetailsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { nanoid } from 'nanoid';
-import { seedData } from './data';
 import slugify from 'slugify';
+import { seedData } from './data';
 
 const prisma = new PrismaClient();
 
@@ -44,12 +43,19 @@ async function main() {
 
   const products = seedData.products;
   for (let i = 0; i < products.length; i++) {
-    const { collectionIds, price, ...product } = products[i];
+    const { collectionIds, price, featuredAsset, ...product } = products[i];
     await prisma.product.create({
       data: {
         ...product,
         collections: {
           connect: [...collectionIds.map((item) => ({ id: item }))],
+        },
+        featuredAsset,
+
+        assets: {
+          create: {
+            url: featuredAsset,
+          },
         },
         productVariants: {
           create: {
@@ -59,6 +65,13 @@ async function main() {
             slug: slugify(product.slug),
             price,
             stockLevel: 120,
+            featuredAsset,
+
+            assets: product.assets && {
+              createMany: {
+                data: product?.assets?.map((item) => ({ url: item })),
+              },
+            },
           },
         },
       },

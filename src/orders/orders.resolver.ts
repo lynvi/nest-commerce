@@ -14,6 +14,7 @@ import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
 import { Order } from './entities/order.entity';
 import { OrdersService } from './orders.service';
+import { AddShippingToOrderInput } from './dto/add-shipping.input';
 
 @Resolver(() => Order)
 export class OrdersResolver {
@@ -77,9 +78,38 @@ export class OrdersResolver {
     );
   }
 
+  @Mutation(() => Order, { nullable: true })
+  async addShippngToOrder(
+    @Context() context,
+    @Args('addShippingToOrderInput')
+    addShippingToOrderInput: AddShippingToOrderInput,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const request = context.req as FastifyRequest;
+
+    return await this.ordersService.addShippingToOrder(
+      addShippingToOrderInput,
+      info,
+      request,
+    );
+  }
+  @Mutation(() => Order, { nullable: true })
+  async finalizeOrder(@Context() context, @Info() info: GraphQLResolveInfo) {
+    const request = context.req as FastifyRequest;
+    return await this.ordersService.finalizeOrder(info, request);
+  }
+
   @Query(() => Order, { nullable: true })
   async activeOrder(@Context() context, @Info() info: GraphQLResolveInfo) {
     const request = context.req as FastifyRequest;
     return await this.ordersService.activeOrder(request, info);
+  }
+
+  @Query(() => Order, { nullable: true })
+  async orderByCode(
+    @Info() info: GraphQLResolveInfo,
+    @Args('orderCode') code: string,
+  ) {
+    return await this.ordersService.orderByCode(code, info);
   }
 }

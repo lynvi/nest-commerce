@@ -1,8 +1,9 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Info } from '@nestjs/graphql';
 import { BrandsService } from './brands.service';
 import { Brand } from './entities/brand.entity';
 import { CreateBrandInput } from './dto/create-brand.input';
 import { UpdateBrandInput } from './dto/update-brand.input';
+import { GraphQLResolveInfo } from 'graphql';
 
 @Resolver(() => Brand)
 export class BrandsResolver {
@@ -14,8 +15,8 @@ export class BrandsResolver {
   }
 
   @Query(() => [Brand], { name: 'brands' })
-  findAll() {
-    return this.brandsService.findAll();
+  findAll(@Info() info: GraphQLResolveInfo) {
+    return this.brandsService.findAll(info);
   }
 
   @Query(() => Brand, { name: 'brand' })

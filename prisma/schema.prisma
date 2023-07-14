@@ -18,10 +18,12 @@ model User {
   isGuest         Boolean          @default(true)
   orders          Order[]
   shippingDetails ShippingDetail[]
-  phone           String?          @unique
-  email           String?          @unique
-  wishList        Wishlist?        @relation(fields: [wishlistId], references: [id])
-  wishlistId      String?          @unique
+  reviews         Review[]
+
+  phone      String?   @unique
+  email      String?   @unique
+  wishList   Wishlist? @relation(fields: [wishlistId], references: [id])
+  wishlistId String?   @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,14 +70,18 @@ model OrderLine {
 }
 
 model Product {
-  id          String  @id @default(cuid())
-  name        String
-  description String
-  slug        String  @unique
-  brand       Brand?  @relation(fields: [brandId], references: [id])
-  brandId     String?
+  id               String    @id @default(cuid())
+  name             String
+  description      String
+  long_description String?
+  productionDate   DateTime?
+  expireDate       DateTime?
+  slug             String    @unique
+  brand            Brand?    @relation(fields: [brandId], references: [id])
+  brandId          String?
 
-  image           String?
+  featuredAsset   String?
+  assets          Asset[]
   productVariants ProductVariant[]
 
   seller   Seller? @relation(fields: [sellerId], references: [id])
@@ -86,9 +92,33 @@ model Product {
 
   collections Collection[]
   tags        Tag[]
+  reviews     Review[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Asset {
+  id  String @id @default(cuid())
+  url String
+
+  position Int? @default(0)
+
+  product          Product?        @relation(fields: [productId], references: [id])
+  productId        String?
+  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id])
+  productVariantId String?
+}
+
+model Review {
+  id       String  @id @default(cuid())
+  rating   Float
+  content  String?
+  customer User?   @relation(fields: [userId], references: [id])
+  userId   String?
+
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
 }
 
 model Wishlist {
@@ -110,8 +140,10 @@ model Brand {
   id          String    @id @default(cuid())
   logo        String
   description String
+  website     String?
   name        String    @unique
   products    Product[]
+  slug        String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -120,15 +152,17 @@ model Brand {
 model ProductVariant {
   id             String          @id @default(cuid())
   name           String
-  image          String?
+  featuredAsset  String?
   product        Product?        @relation(fields: [productId], references: [id])
   productId      String?
   price          Int             @default(0)
   slug           String
   stockLevel     Int             @default(1)
+  sku            String?
   description    String
   orderLines     OrderLine[]
   productOptions ProductOption[]
+  assets         Asset[]
 }
 
 model ProductOption {
@@ -140,18 +174,21 @@ model ProductOption {
 }
 
 model Order {
-  id            String         @id @default(cuid())
-  code          String
-  customer      User?          @relation(fields: [userId], references: [id])
-  userId        String?
-  status        OrderStatus
-  paymentMethod PaymentMethod?
-  paymentStatus PaymentStatus?
+  id               String          @id @default(cuid())
+  code             String          @unique()
+  customer         User?           @relation(fields: [userId], references: [id])
+  userId           String?
+  status           OrderStatus
+  paymentMethod    PaymentMethod?
+  paymentStatus    PaymentStatus?
+  shippingDetail   ShippingDetail? @relation(fields: [shippingDetailId], references: [id])
+  shippingDetailId String?
+
   session       Session?
   orderLines    OrderLine[]
-  appliedCoupon Coupon?        @relation(fields: [couponId], references: [id])
+  appliedCoupon Coupon?     @relation(fields: [couponId], references: [id])
   couponId      String?
-  total         Int?           @default(0)
+  total         Int?        @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -169,8 +206,8 @@ model Coupon {
 
 model ShippingDetail {
   id            String   @id @default(cuid())
-  user          User     @relation(fields: [userId], references: [id])
-  userId        String
+  user          User?    @relation(fields: [userId], references: [id])
+  userId        String?
   default       Boolean? @default(false)
   city          String?
   country       String?
@@ -180,6 +217,7 @@ model ShippingDetail {
   firstName     String?
   lastName      String?
   email         String?
+  orders        Order[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -216,6 +254,7 @@ model Session {
 enum OrderStatus {
   ACTIVE
   CANCELED
+  SHIPPING_PENDING
   SHIPPED
   DELIVERED
 }

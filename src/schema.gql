@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ProductCount {
+  """products count"""
+  products: Int!
+}
+
 type Brand {
   """Brand ID"""
   id: ID!
@@ -14,32 +19,23 @@ type Brand {
 
   """Brand logo"""
   logo: String!
-}
 
-type Collection {
-  """collection id"""
-  id: ID!
-
-  """collection name"""
-  name: String!
-
-  """collection slug"""
+  """Brand slug"""
   slug: String!
 
-  """collection position"""
-  position: Int!
+  """Brand slug"""
+  _count: ProductCount!
+}
 
-  """collection desc"""
-  description: String!
+type Asset {
+  """asset Id"""
+  id: ID!
 
-  """Parent collection"""
-  parent: Collection
+  """asset url"""
+  url: String!
 
-  """Collection childs"""
-  children: [Collection!]
-
-  """collection products"""
-  products: [Product!]!
+  """asset position"""
+  postion: Int!
 }
 
 type ProductVariant {
@@ -55,8 +51,17 @@ type ProductVariant {
   """Product variant slug"""
   slug: String
 
-  """Product variant image"""
-  image: String
+  """Product variant sku"""
+  sku: String
+
+  """product variant featured  asset"""
+  featuredAsset: String
+
+  """product assets"""
+  assets: [Asset!]
+
+  """product"""
+  product: Product!
 
   """Product variant product id"""
   productId: String!
@@ -92,13 +97,42 @@ type Product {
   """product description"""
   description: String
 
-  """product image"""
-  image: String
+  """product featured  asset"""
+  featuredAsset: String
+
+  """product assets"""
+  assets: [Asset!]
   brand: Brand
   seller: Brand
   tags: [Tag!]
   collections: [Collection!]
   productVariants: [ProductVariant!]
+}
+
+type Collection {
+  """collection id"""
+  id: ID!
+
+  """collection name"""
+  name: String!
+
+  """collection slug"""
+  slug: String!
+
+  """collection position"""
+  position: Int!
+
+  """collection desc"""
+  description: String!
+
+  """Parent collection"""
+  parent: Collection
+
+  """Collection childs"""
+  children: [Collection!]
+
+  """collection products"""
+  products: [Product!]!
 }
 
 type Coupon {
@@ -114,7 +148,7 @@ type OrderLine {
   productVariant: ProductVariant!
 
   """quantity"""
-  quantity: ID!
+  quantity: Int!
 
   """related order"""
   order: Order!
@@ -135,6 +169,29 @@ type User {
 
   """"""
   phone: String
+}
+
+type ShippingDetail {
+  """id"""
+  id: ID
+
+  """city"""
+  city: String
+
+  """contry"""
+  country: String
+
+  """postal code"""
+  zipCode: String
+
+  """street Address"""
+  streetAddress: String
+
+  """phone """
+  phoneNumber: String
+
+  """is default shipping address """
+  default: Boolean
 }
 
 type Order {
@@ -159,6 +216,9 @@ type Order {
   """order customer"""
   customer: User
 
+  """order shipping detail"""
+  shippingDetail: ShippingDetail
+
   """order total price"""
   total: Int
 }
@@ -166,6 +226,7 @@ type Order {
 enum OrderStatus {
   ACTIVE
   CANCELED
+  SHIPPING_PENDING
   SHIPPED
   DELIVERED
 }
@@ -177,17 +238,22 @@ type Query {
   brand(id: String!): Brand!
   tags: [Tag!]!
   tag(id: String!): Tag!
-  collections: [Collection!]!
+  collections(topLevel: Boolean): [Collection!]!
   collection(id: String, slug: String): Collection
   orders: [Order!]!
   order(id: String!): Order!
   activeOrder: Order
+  orderByCode(orderCode: String!): Order
   productVariants: [ProductVariant!]!
   productVariant(id: Int!): ProductVariant!
   coupons: [Coupon!]!
   coupon(id: Int!): Coupon!
   users: [User!]!
   user(id: Int!): User!
+  assets: [Asset!]!
+  asset(id: Int!): Asset!
+  shippingDetails: [ShippingDetail!]!
+  shippingDetail(id: Int!): ShippingDetail!
 }
 
 input FilterProductInput {
@@ -213,6 +279,8 @@ type Mutation {
   removeOrder(id: String!): Order!
   addToCart(addToCartInput: AddToCartInput!): Order!
   addCustomerToOrder(addCustomerToOrderInput: AddCustomerToOrderInput!): Order
+  addShippngToOrder(addShippingToOrderInput: AddShippingToOrderInput!): Order
+  finalizeOrder: Order
   createProductVariant(createProductVariantInput: CreateProductVariantInput!): ProductVariant!
   updateProductVariant(updateProductVariantInput: UpdateProductVariantInput!): ProductVariant!
   removeProductVariant(id: Int!): ProductVariant!
@@ -222,6 +290,12 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  createAsset(createAssetInput: CreateAssetInput!): Asset!
+  updateAsset(updateAssetInput: UpdateAssetInput!): Asset!
+  removeAsset(id: Int!): Asset!
+  createShippingDetail(createShippingDetailInput: CreateShippingDetailInput!): ShippingDetail!
+  updateShippingDetail(updateShippingDetailInput: UpdateShippingDetailInput!): ShippingDetail!
+  removeShippingDetail(id: Int!): ShippingDetail!
 }
 
 input CreateProductInput {
@@ -274,6 +348,9 @@ input CreateBrandInput {
 
   """Brand logo"""
   logo: String!
+
+  """Brand slug"""
+  slug: String!
 }
 
 input UpdateBrandInput {
@@ -285,6 +362,9 @@ input UpdateBrandInput {
 
   """Brand logo"""
   logo: String
+
+  """Brand slug"""
+  slug: String
 }
 
 input CreateTagInput {
@@ -354,6 +434,20 @@ input AddCustomerToOrderInput {
   email: String
 }
 
+input AddShippingToOrderInput {
+  """"""
+  street: String
+
+  """"""
+  city: String
+
+  """"""
+  zipCode: String
+
+  """"""
+  phoneNumber: String
+}
+
 input CreateProductVariantInput {
   """Product variant name"""
   name: String!
@@ -418,6 +512,28 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateAssetInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateAssetInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateShippingDetailInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateShippingDetailInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

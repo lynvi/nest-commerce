@@ -23,9 +23,11 @@ export class CollectionsService {
     });
   }
 
-  findAll(info: GraphQLResolveInfo) {
+  findAll(info: GraphQLResolveInfo, isTopLevel: boolean = false) {
     const select = new PrismaSelect(info).value;
-    return this.prismaService.collection.findMany({ ...select });
+    let where = isTopLevel ? { parentId: null } : {};
+
+    return this.prismaService.collection.findMany({ ...select, where });
   }
 
   findOne(info: GraphQLResolveInfo, id?: string, slug?: string) {

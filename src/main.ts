@@ -10,10 +10,18 @@ import { IConfig } from './config/config.interface';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 
+function loggingMiddleware(req, res, next) {
+  if (req.url.startsWith('/graphql')) {
+  }
+  next();
+}
+
 async function bootstrap() {
+  const fastifyAdapter = new FastifyAdapter();
+  // fastifyAdapter.enableCors({ origin: '*' });
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    fastifyAdapter,
   );
   const configService = app.get<ConfigService>(ConfigService);
 
@@ -23,8 +31,11 @@ async function bootstrap() {
   } as FastifyCookieOptions);
 
   app.enableCors({
-    origin: '*', // TODO :: Change this in production
+    origin: 'http://localhost:3000',
+    credentials: true, // TODO :: Change this in production
   });
+
+  app.use(loggingMiddleware);
 
   const PORT = process.env.PORT || 4000;
   await app.listen(PORT, '0.0.0.0');

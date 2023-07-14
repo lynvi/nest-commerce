@@ -17,8 +17,12 @@ export class CollectionsResolver {
   }
 
   @Query(() => [Collection], { name: 'collections' })
-  findAll(@Info() info: GraphQLResolveInfo) {
-    return this.collectionsService.findAll(info);
+  findAll(
+    @Info() info: GraphQLResolveInfo,
+    @Args('topLevel', { type: () => Boolean, nullable: true })
+    isTopLevel: boolean,
+  ) {
+    return this.collectionsService.findAll(info, isTopLevel);
   }
 
   @Query(() => Collection, { name: 'collection', nullable: true })

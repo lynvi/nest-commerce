@@ -2,6 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateBrandInput } from './dto/create-brand.input';
 import { UpdateBrandInput } from './dto/update-brand.input';
 import { PrismaService } from 'nestjs-prisma';
+import { GraphQLResolveInfo } from 'graphql';
+import { PrismaSelect } from '@paljs/plugins';
 
 @Injectable()
 export class BrandsService {
@@ -17,8 +19,19 @@ export class BrandsService {
     return this.prismaService.brand.create({ data: createBrandInput });
   }
 
-  findAll() {
-    return this.prismaService.brand.findMany();
+  findAll(info: GraphQLResolveInfo) {
+    const select = new PrismaSelect(info).value;
+
+    // this.prismaService.brand.findMany({
+    //   select: {
+    //     _count: {
+    //       select: {
+    //         products: true,
+    //       },
+    //     },
+    //   },
+    // });
+    return this.prismaService.brand.findMany({ ...select });
   }
 
   findOne(id: string) {

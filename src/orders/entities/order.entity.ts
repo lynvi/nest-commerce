@@ -3,6 +3,7 @@ import { OrderStatus } from '@prisma/client';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { OrderLine } from './order-line.entity';
 import { User } from 'src/users/entities/user.entity';
+import { ShippingDetail } from 'src/shipping-details/entities/shipping-detail.entity';
 
 @ObjectType()
 export class Order {
@@ -26,6 +27,12 @@ export class Order {
 
   @Field(() => User, { description: 'order customer', nullable: true })
   customer?: User;
+
+  @Field(() => ShippingDetail, {
+    description: 'order shipping detail',
+    nullable: true,
+  })
+  shippingDetail: ShippingDetail;
 
   @Field(() => Int, { description: 'order total price', nullable: true })
   total?: number;

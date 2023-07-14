@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Asset } from 'src/assets/entities/asset.entity';
 import { Brand } from 'src/brands/entities/brand.entity';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { ProductVariant } from 'src/product-variants/entities/product-variant.entity';
@@ -18,8 +19,14 @@ export class Product {
   @Field(() => String, { description: 'product description', nullable: true })
   description: string;
 
-  @Field(() => String, { description: 'product image', nullable: true })
-  image: string;
+  @Field(() => String, {
+    description: 'product featured  asset',
+    nullable: true,
+  })
+  featuredAsset: string;
+
+  @Field(() => [Asset], { description: 'product assets', nullable: true })
+  assets: Asset[];
 
   @Field((type) => Brand, { nullable: true })
   brand?: Brand;

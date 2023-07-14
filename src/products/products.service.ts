@@ -23,6 +23,7 @@ export class ProductsService {
       const select = new PrismaSelect(info).value;
       return await this.prismaService.product.create({
         ...select,
+
         data: {
           ...input,
           tags: {
@@ -64,8 +65,9 @@ export class ProductsService {
     });
   }
 
-  findOne(info: GraphQLResolveInfo, id?: string, slug?: string) {
+  async findOne(info: GraphQLResolveInfo, id?: string, slug?: string) {
     const select = new PrismaSelect(info).value;
+
     return this.prismaService.product.findFirst({
       where: { OR: [{ id, slug }] },
       ...select,
@@ -92,7 +94,6 @@ export class ProductsService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(error.code.substring(1));
         switch (error.code) {
           case 'P2025': {
             throw new NotFoundException();
@@ -106,8 +107,6 @@ export class ProductsService {
 
 const PrimaErrorCodeMapping = (code: string) => {
   //https://www.prisma.io/docs/reference/api-reference/error-reference#prisma-client-query-engine
-
-  console.log(code.substring(1));
 
   switch (code) {
     case 'P2025': {

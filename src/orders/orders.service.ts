@@ -1,18 +1,24 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { GraphQLResolveInfo } from 'graphql';
 import { customAlphabet } from 'nanoid';
 import { PrismaService } from 'nestjs-prisma';
+import { lastValueFrom } from 'rxjs';
+import { formatedPrice } from 'src/utils';
 import { AddCustomerToOrderInput } from './dto/add-customer.input';
+import { AddShippingToOrderInput } from './dto/add-shipping.input';
 import { AddToCartInput } from './dto/add-to-cart.input';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
-import { Session } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private httpService: HttpService,
+  ) {}
   create(createOrderInput: CreateOrderInput) {
     return 'This action adds a new order';
   }
@@ -42,7 +48,7 @@ export class OrdersService {
     const select = new PrismaSelect(info).value;
 
     const nanoid = customAlphabet(
-      '1234567890qwertyuiopasdfghjklzxcvbnQWERTYUIOP;LKJHGFDSAZXCVBN',
+      '1234567890qwertyuiopasdfghjklzxcvbnQWERTYUIOPLKJHGFDSAZXCVBN',
       10,
     );
     const productVariant = await this.prismaService.productVariant.findUnique({
@@ -54,7 +60,7 @@ export class OrdersService {
     }
 
     const sessionId = request.cookies['session'];
-    const session = await this.prismaService.session.findUnique({
+    let session = await this.prismaService.session.findUnique({
       include: { activeOrder: { include: { orderLines: true } } },
       where: { id: sessionId || '' },
     });
@@ -62,12 +68,29 @@ export class OrdersService {
     const randomString = nanoid(80);
 
     if (!session) {
-      if (productVariant.stockLevel < addToCartInput.quantity) {
-        return new Error('Insufisant stock');
-      }
-      const order = await this.prismaService.order.create({
-        select: { ...select.select, id: true },
+      session = await this.prismaService.session.create({
+        include: { activeOrder: { include: { orderLines: true } } },
         data: {
+          id: randomString,
+          expiredAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        },
+      });
+    }
+
+    if (session?.activeOrder) {
+      const quantity =
+        session.activeOrder.orderLines.find(
+          (item) => item.productVariantId === addToCartInput.productVariantId,
+        )?.quantity || 0;
+
+      if (productVariant.stockLevel < addToCartInput.quantity + quantity) {
+        return new Error('Stock low');
+      }
+
+      return await this.prismaService.order.upsert({
+        where: { id: session.orderId || '' },
+        ...select,
+        create: {
           status: 'ACTIVE',
           code: nanoid(18).toUpperCase(),
           orderLines: {
@@ -76,44 +99,40 @@ export class OrdersService {
               productVariantId: addToCartInput.productVariantId,
             },
           },
-
           total: productVariant.price * addToCartInput.quantity,
         },
-      });
 
-      const session = await this.prismaService.session.create({
-        data: {
-          activeOrder: {
-            connect: {
-              id: order.id as string,
+        update: {
+          orderLines: {
+            upsert: {
+              create: {
+                quantity: addToCartInput.quantity,
+                productVariantId: addToCartInput.productVariantId,
+              },
+              update: {
+                quantity: { increment: addToCartInput.quantity },
+              },
+              where: {
+                orderId_productVariantId: {
+                  orderId: session.orderId,
+                  productVariantId: addToCartInput.productVariantId,
+                },
+              },
             },
           },
-          id: randomString,
-          expiredAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          total: { increment: productVariant.price * addToCartInput.quantity },
         },
       });
-
-      reply.setCookie('session', session.id, {
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        httpOnly: true, // 1 day in milliseconds
-        path: '/', // The path where the cookie is valid (in this case, the root path)
-      });
-
-      return order;
     }
 
-    const quantity = session.activeOrder.orderLines.find(
-      (item) => item.productVariantId === addToCartInput.productVariantId,
-    ).quantity;
+    // adsda
 
-    if (productVariant.stockLevel < addToCartInput.quantity + quantity) {
-      return new Error('insufisant stock');
+    if (productVariant.stockLevel < addToCartInput.quantity) {
+      return new Error('Stock low');
     }
-
-    return await this.prismaService.order.upsert({
-      where: { id: session.orderId || '' },
-      ...select,
-      create: {
+    const order = await this.prismaService.order.create({
+      select: { ...select.select, id: true },
+      data: {
         status: 'ACTIVE',
         code: nanoid(18).toUpperCase(),
         orderLines: {
@@ -122,34 +141,28 @@ export class OrdersService {
             productVariantId: addToCartInput.productVariantId,
           },
         },
+
         total: productVariant.price * addToCartInput.quantity,
       },
-
-      update: {
-        orderLines: {
-          upsert: {
-            create: {
-              quantity: addToCartInput.quantity,
-              productVariantId: addToCartInput.productVariantId,
-            },
-            update: {
-              quantity: { increment: addToCartInput.quantity },
-            },
-            where: {
-              orderId_productVariantId: {
-                orderId: session.orderId,
-                productVariantId: addToCartInput.productVariantId,
-              },
-            },
-          },
-        },
-        total: { increment: productVariant.price * addToCartInput.quantity },
-      },
     });
+
+    await this.prismaService.session.update({
+      where: { id: session.id },
+      data: { activeOrder: { connect: { id: order.id as string } } },
+    });
+
+    reply.setCookie('session', session.id, {
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      httpOnly: true, // 1 day in milliseconds
+      path: '/', // The path where the cookie is valid (in this case, the root path)
+    });
+
+    return order;
   }
 
   async activeOrder(request: FastifyRequest, info: GraphQLResolveInfo) {
     const sessionId = request.cookies['session'];
+
     const select = new PrismaSelect(info).value;
     const session = await this.prismaService.session.findUnique({
       include: { activeOrder: { ...select } },
@@ -202,5 +215,189 @@ export class OrdersService {
     });
 
     return order;
+  }
+
+  async addShippingToOrder(
+    addShippingToOrder: AddShippingToOrderInput,
+    info: GraphQLResolveInfo,
+    request: FastifyRequest,
+  ) {
+    const sessionId = request.cookies['session'];
+    const select = new PrismaSelect(info).value;
+
+    const session = await this.prismaService.session.findUnique({
+      include: { activeOrder: { ...select } },
+      where: { id: sessionId || '' },
+    });
+
+    if (!session?.activeOrder) {
+      return null;
+    }
+
+    const order = await this.prismaService.order.update({
+      ...select,
+      where: { id: session.activeOrder.id },
+      data: {
+        shippingDetail: {
+          create: {
+            city: addShippingToOrder.city,
+            phoneNumber: addShippingToOrder.phoneNumber,
+            zipCode: addShippingToOrder.zipCode,
+            streetAddress: addShippingToOrder.street,
+          },
+        },
+      },
+    });
+
+    console.log(order);
+    return order;
+  }
+
+  async finalizeOrder(info: GraphQLResolveInfo, request: FastifyRequest) {
+    const sessionId = request.cookies['session'];
+    const select = new PrismaSelect(info).value;
+
+    const session = await this.prismaService.session.findUnique({
+      include: { activeOrder: { ...select } },
+      where: { id: sessionId || '' },
+    });
+
+    if (!session?.activeOrder) {
+      return null;
+    }
+
+    const order = await this.prismaService.order.findUnique({
+      where: { id: session.activeOrder.id },
+    });
+
+    if (order.shippingDetailId && order.userId && order.status === 'ACTIVE') {
+      await this.prismaService.session.update({
+        where: { id: session.id },
+        data: { activeOrder: { disconnect: true } },
+      });
+
+      const updatedOrder = await this.prismaService.order.update({
+        select: {
+          id: true,
+          shippingDetail: {
+            select: {
+              city: true,
+              zipCode: true,
+              country: true,
+              firstName: true,
+              lastName: true,
+              phoneNumber: true,
+              streetAddress: true,
+            },
+          },
+          orderLines: {
+            include: {
+              productVariant: true,
+            },
+          },
+          customer: {
+            select: { lastName: true, firstName: true, phone: true },
+          },
+        },
+        where: { id: order.id },
+        data: {
+          status: 'SHIPPING_PENDING',
+        },
+      });
+
+      const orderToSlackMessage = {
+        blocks: [
+          {
+            type: 'header',
+            text: {
+              type: 'plain_text',
+              text: `Nouvelle commande par ${updatedOrder.customer.firstName} ${updatedOrder.customer.lastName} 🥳`,
+              emoji: true,
+            },
+          },
+          // {
+          //   type: 'section',
+          //   fields: [
+          //     {
+          //       type: 'mrkdwn',
+          //       text: `*Commander par:* <example.com|${updatedOrder.customer.firstName} ${updatedOrder.customer.lastName}>`,
+          //     },
+          //   ],
+          // },
+
+          {
+            type: 'section',
+            fields: [
+              {
+                type: 'mrkdwn',
+                text: `*Details de livraison:*\n${updatedOrder.shippingDetail.streetAddress},${updatedOrder.shippingDetail.zipCode}, ${updatedOrder.shippingDetail.city}.\n<tel:${updatedOrder.shippingDetail.phoneNumber}|${updatedOrder.shippingDetail.phoneNumber}>`,
+              },
+            ],
+          },
+          {
+            type: 'section',
+            fields: [
+              {
+                type: 'mrkdwn',
+                text: `*Produits commander:*`,
+              },
+            ],
+          },
+          {
+            type: 'divider',
+          },
+
+          ...updatedOrder.orderLines.map((item) => ({
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `*${item.quantity}* • ${
+                item.productVariant.name
+              }\n_${formatedPrice(item.productVariant.price)}_`,
+            },
+            accessory: {
+              type: 'image',
+              image_url: item.productVariant.featuredAsset,
+              alt_text: item.productVariant.name,
+            },
+          })),
+
+          {
+            type: 'divider',
+          },
+          {
+            type: 'section',
+            fields: [
+              {
+                type: 'mrkdwn',
+                text: `*Total:* ${formatedPrice(order.total)}`,
+              },
+            ],
+          },
+        ],
+      };
+
+      const request = await lastValueFrom(
+        this.httpService.post(
+          'https://hooks.slack.com/services/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',
+          orderToSlackMessage,
+        ),
+      );
+
+      return await this.prismaService.order.findUnique({
+        ...select,
+        where: { id: updatedOrder.id },
+      });
+    }
+
+    return null;
+  }
+
+  async orderByCode(code: string, info: GraphQLResolveInfo) {
+    const select = new PrismaSelect(info).value;
+    return await this.prismaService.order.findUnique({
+      where: { code },
+      ...select,
+    });
   }
 }
