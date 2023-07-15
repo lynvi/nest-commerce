@@ -170,7 +170,7 @@ export const seedData = {
       website: 'https://cellucor.com',
       description:
         "Avec plus de 3 milliards de portions vendues dans le monde entier, les compléments nutritionnels et les suppléments d'entraînement de Cellucor® sont conçus pour rendre l'énergie de performance accessible à tous.",
-      logo: 'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/cellucor.png',
+      logo: 'cellucor.png',
     },
     {
       id: 'optimum-nutrition',
@@ -179,7 +179,7 @@ export const seedData = {
       website: 'https://www.optimumnutrition.com',
       description:
         'Optimum Nutrition® has been the brand professional athletes and gym enthusiasts trust. Everybody has goals - let us help you reach yours.',
-      logo: 'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/optimum-nutrition-logo.png',
+      logo: 'optimum-nutrition-logo.png',
     },
     {
       id: 'tesla-nutrition',
@@ -188,7 +188,7 @@ export const seedData = {
       website: 'https://www.tesla-nutritions.com/',
       description:
         'Tesla Sport Nutrition est la marque de suppléments qui connaît la croissance la plus rapide en Europe depuis 2012 ',
-      logo: 'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/tesla-logo.png',
+      logo: 'tesla-logo.png',
     },
     {
       id: 'muscletech',
@@ -197,7 +197,7 @@ export const seedData = {
       website: 'https://www.muscletech.com/',
       description:
         'MuscleTech is a brand of dietary supplements, marketed by Iovate Health Sciences Inc., which includes Hydroxycut.',
-      logo: 'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/Muscletech.png',
+      logo: 'Muscletech.png',
     },
     {
       id: 'superior14',
@@ -205,7 +205,7 @@ export const seedData = {
       slug: slugify('superior 14.', { lower: true }),
       website: 'https://www.superior14.com/',
       description: '',
-      logo: 'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/superior14.png',
+      logo: 'superior14.png',
     },
   ],
   products: [
@@ -221,8 +221,7 @@ export const seedData = {
       brandId: 'cellucor',
       collectionIds: ['energie-recuperation', 'supplements'],
 
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/c4.png',
+      featuredAsset: 'c4.png',
 
       price: 34900,
     },
@@ -238,8 +237,7 @@ export const seedData = {
       brandId: 'tesla-nutrition',
       collectionIds: ['gainer', 'supplements'],
 
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/masstech-extreme.png',
+      featuredAsset: 'masstech-extreme.png',
 
       price: 34900,
     },
@@ -255,8 +253,7 @@ export const seedData = {
       brandId: 'tesla-nutrition',
       collectionIds: ['creatine', 'supplements'],
 
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/tesla-creatine.png',
+      featuredAsset: 'tesla-creatine.png',
 
       price: 34900,
     },
@@ -271,12 +268,9 @@ export const seedData = {
       }),
       brandId: 'tesla-nutrition',
       collectionIds: ['accessories', 'shakers'],
-      assets: [
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/shaker-savage.png',
-      ],
+      assets: ['shaker-savage.png'],
 
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/shaker-savage.png',
+      featuredAsset: 'shaker-savage.png',
 
       price: 7900,
     },
@@ -290,12 +284,9 @@ export const seedData = {
       }),
       brandId: 'optimum-nutrition',
       collectionIds: ['protein', 'supplements'],
-      assets: [
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/gold-standard.png',
-      ],
+      assets: ['gold-standard.png'],
 
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/gold-standard.png',
+      featuredAsset: 'gold-standard.png',
 
       price: 5000,
     },
@@ -309,8 +300,7 @@ export const seedData = {
         lower: true,
       }),
       brandId: 'muscletech',
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/nitrotech.png',
+      featuredAsset: 'nitrotech.png',
       price: 75000,
     },
     {
@@ -323,8 +313,7 @@ export const seedData = {
         lower: true,
       }),
       brandId: 'superior14',
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/hydro-superior14.png',
+      featuredAsset: 'hydro-superior14.png',
       price: 75000,
     },
     {
@@ -335,8 +324,7 @@ export const seedData = {
         'Les poignets enveloppants soutiennent les poignets lors de divers exercices d’haltères',
       slug: 'bande-poignet-pakka',
 
-      featuredAsset:
-        'https://pub-ff31fe281cef4e969f36e8d7057d5a50.r2.dev/pakka-bande.png',
+      featuredAsset: 'pakka-bande.png',
       price: 4500,
     },
   ],
