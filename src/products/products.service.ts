@@ -58,6 +58,7 @@ export class ProductsService {
     return this.prismaService.product.findMany({
       ...select,
       where: {
+        brandId: filter.brandId || undefined,
         collections: filter?.collectionSlug
           ? { some: { slug: filter.collectionSlug } }
           : undefined,

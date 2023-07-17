@@ -7,4 +7,10 @@ export class FilterProductInput {
     nullable: true,
   })
   collectionSlug: string;
+
+  @Field(() => String, {
+    description: 'Products by brandId',
+    nullable: true,
+  })
+  brandId: string;
 }

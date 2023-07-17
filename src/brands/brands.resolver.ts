@@ -20,8 +20,12 @@ export class BrandsResolver {
   }
 
   @Query(() => Brand, { name: 'brand' })
-  findOne(@Args('id', { type: () => String }) id: string) {
-    return this.brandsService.findOne(id);
+  findOne(
+    @Args('id', { type: () => String, description: 'id or slug' })
+    id: string,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    return this.brandsService.findOne(id, info);
   }
 
   @Mutation(() => Brand)

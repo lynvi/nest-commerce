@@ -301,6 +301,7 @@ export const seedData = {
       }),
       brandId: 'muscletech',
       featuredAsset: 'nitrotech.png',
+      assets: ['nitrotech.png', 'nitrotech-2.png'],
       price: 75000,
     },
     {

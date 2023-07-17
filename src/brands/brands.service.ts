@@ -34,8 +34,12 @@ export class BrandsService {
     return this.prismaService.brand.findMany({ ...select });
   }
 
-  findOne(id: string) {
-    return this.prismaService.brand.findUnique({ where: { id } });
+  findOne(id: string, info: GraphQLResolveInfo) {
+    const select = new PrismaSelect(info).value;
+    return this.prismaService.brand.findFirst({
+      where: { OR: [{ id, slug: id }] },
+      ...select,
+    });
   }
 
   update(id: string, updateBrandInput: UpdateBrandInput) {

@@ -235,7 +235,10 @@ type Query {
   products(filterProductInput: FilterProductInput): [Product!]!
   product(id: String, slug: String): Product
   brands: [Brand!]!
-  brand(id: String!): Brand!
+  brand(
+    """id or slug"""
+    id: String!
+  ): Brand!
   tags: [Tag!]!
   tag(id: String!): Tag!
   collections(topLevel: Boolean): [Collection!]!
@@ -259,6 +262,9 @@ type Query {
 input FilterProductInput {
   """Products by collection slug"""
   collectionSlug: String
+
+  """Products by brandId"""
+  brandId: String
 }
 
 type Mutation {

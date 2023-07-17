@@ -52,9 +52,9 @@ async function main() {
         },
         featuredAsset,
 
-        assets: {
-          create: {
-            url: featuredAsset,
+        assets: product.assets && {
+          createMany: {
+            data: product?.assets?.map((item) => ({ url: item })),
           },
         },
         productVariants: {
