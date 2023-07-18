@@ -37,7 +37,7 @@ async function bootstrap() {
       'https://devlop.alphafit.ma',
       'https://alphafit.ma',
       'https://www.alphafit.ma',
-      'localhost',
+      'http://localhost:3000',
     ],
     credentials: true, // TODO :: Change this in production
   });
