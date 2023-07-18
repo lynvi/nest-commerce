@@ -31,7 +31,11 @@ async function bootstrap() {
   } as FastifyCookieOptions);
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: [
+      'storefront-nkd6qaz8i-aboukinanee.vercel.app',
+      'https://storefront-tawny-one.vercel.app',
+      'localhost',
+    ],
     credentials: true, // TODO :: Change this in production
   });
 
