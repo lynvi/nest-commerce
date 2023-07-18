@@ -34,6 +34,8 @@ async function bootstrap() {
     origin: [
       'storefront-nkd6qaz8i-aboukinanee.vercel.app',
       'https://storefront-tawny-one.vercel.app',
+      'devlop.alphafit.ma',
+      'alphafit.ma',
       'localhost',
     ],
     credentials: true, // TODO :: Change this in production
