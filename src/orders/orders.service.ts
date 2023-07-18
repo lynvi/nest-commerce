@@ -155,8 +155,7 @@ export class OrdersService {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
       httpOnly: true, // 1 day in milliseconds
       path: '/',
-      sameSite: 'none',
-      secure: true, // The path where the cookie is valid (in this case, the root path)
+      // The path where the cookie is valid (in this case, the root path)
     });
 
     return order;
