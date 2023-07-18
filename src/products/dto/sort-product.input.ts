@@ -1,8 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { Prisma } from '@prisma/client';
 
 @InputType()
-export class FilterProductInput {
+export class SortProductInput {
   @Field(() => String, {
     description: 'Products by collection slug',
     nullable: true,
@@ -27,17 +26,4 @@ export class FilterProductInput {
     nullable: true,
   })
   maxPrice: number;
-
-  @Field(() => String, {
-    description: 'order by ',
-    nullable: true,
-  })
-  orderBy: string;
-
-  @Field(() => Prisma.SortOrder, {
-    description: 'order by ',
-    nullable: true,
-    defaultValue: 'asc',
-  })
-  sortOrder: 'asc' | 'desc';
 }

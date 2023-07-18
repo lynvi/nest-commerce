@@ -57,6 +57,11 @@ export class ProductsService {
 
     return this.prismaService.product.findMany({
       ...select,
+      orderBy: [
+        filter.orderBy && {
+          [filter.orderBy]: filter.sortOrder,
+        },
+      ],
       where: {
         productVariants: {
           some: {

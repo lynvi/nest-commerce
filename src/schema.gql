@@ -271,6 +271,17 @@ input FilterProductInput {
 
   """Products by max price"""
   maxPrice: Int
+
+  """order by """
+  orderBy: String
+
+  """order by """
+  sortOrder: SortOrder = asc
+}
+
+enum SortOrder {
+  asc
+  desc
 }
 
 type Mutation {

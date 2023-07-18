@@ -43,10 +43,11 @@ async function main() {
 
   const products = seedData.products;
   for (let i = 0; i < products.length; i++) {
-    const { collectionIds, price, featuredAsset, ...product } = products[i];
+    const { collectionIds, featuredAsset, ...product } = products[i];
     await prisma.product.create({
       data: {
         ...product,
+
         collections: {
           connect: [...collectionIds.map((item) => ({ id: item }))],
         },
@@ -63,7 +64,7 @@ async function main() {
             name: product.name,
             description: product.description,
             slug: slugify(product.slug),
-            price,
+            price: product.price,
             stockLevel: 120,
             featuredAsset,
 
