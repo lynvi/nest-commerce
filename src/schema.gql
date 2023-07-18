@@ -265,6 +265,12 @@ input FilterProductInput {
 
   """Products by brandId"""
   brandId: String
+
+  """Products by min price"""
+  minPrice: Int = 0
+
+  """Products by max price"""
+  maxPrice: Int
 }
 
 type Mutation {

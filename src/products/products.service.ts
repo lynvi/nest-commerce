@@ -58,7 +58,15 @@ export class ProductsService {
     return this.prismaService.product.findMany({
       ...select,
       where: {
-        brandId: filter.brandId || undefined,
+        productVariants: {
+          some: {
+            AND: [
+              { price: { lte: filter?.maxPrice } },
+              { price: { gte: filter?.minPrice } },
+            ],
+          },
+        },
+        brandId: filter?.brandId,
         collections: filter?.collectionSlug
           ? { some: { slug: filter.collectionSlug } }
           : undefined,
