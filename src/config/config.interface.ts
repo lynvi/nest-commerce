@@ -6,4 +6,7 @@ export interface IConfig {
   cookies: {
     secret: string;
   };
+  slack: {
+    ordersChannel: string;
+  };
 }

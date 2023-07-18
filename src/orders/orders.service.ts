@@ -152,9 +152,12 @@ export class OrdersService {
     });
 
     reply.setCookie('session', session.id, {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      httpOnly: true, // 1 day in milliseconds
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day in milliseconds
       path: '/',
+      secure: true,
+      httpOnly: false,
+      sameSite: 'none',
+      domain: 'alphafit.ma',
       // The path where the cookie is valid (in this case, the root path)
     });
 

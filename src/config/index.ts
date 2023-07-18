@@ -17,5 +17,8 @@ export function config(): IConfig {
     cookies: {
       secret: process.env.COOKIES_SECRET,
     },
+    slack: {
+      ordersChannel: process.env.SLACK_ORDERS_CHANNEL_WEBHOOK,
+    },
   };
 }
