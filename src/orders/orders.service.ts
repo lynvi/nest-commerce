@@ -12,12 +12,14 @@ import { AddShippingToOrderInput } from './dto/add-shipping.input';
 import { AddToCartInput } from './dto/add-to-cart.input';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class OrdersService {
   constructor(
     private prismaService: PrismaService,
     private httpService: HttpService,
+    private configService: ConfigService,
   ) {}
   create(createOrderInput: CreateOrderInput) {
     return 'This action adds a new order';
@@ -381,11 +383,12 @@ export class OrdersService {
         ],
       };
 
+      const orderChannelWebhoolUrl = this.configService.get(
+        'slack.ordersChannel',
+      );
+
       const request = await lastValueFrom(
-        this.httpService.post(
-          'https://hooks.slack.com/services/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',
-          orderToSlackMessage,
-        ),
+        this.httpService.post(orderChannelWebhoolUrl.orderToSlackMessage),
       );
 
       return await this.prismaService.order.findUnique({
