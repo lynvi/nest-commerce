@@ -1,5 +1,7 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+
 import { Asset } from 'src/assets/entities/asset.entity';
+import { ProductOption } from 'src/product-options/entities/product-option.entity';
 import { Product } from 'src/products/entities/product.entity';
 
 @ObjectType()
@@ -41,4 +43,7 @@ export class ProductVariant {
 
   @Field(() => Int, { description: 'Product variant stocklevel' })
   stockLevel: number;
+
+  @Field(() => [ProductOption], { description: 'Product variant stocklevel' })
+  productOptions: ProductOption[];
 }

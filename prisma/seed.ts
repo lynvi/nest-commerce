@@ -60,6 +60,7 @@ async function main() {
         },
         productVariants: {
           create: {
+            ref: Math.floor(10000000 + Math.random() * 90000000) + '',
             id: product.id,
             name: product.name,
             description: product.description,
@@ -71,6 +72,20 @@ async function main() {
             assets: product.assets && {
               createMany: {
                 data: product?.assets?.map((item) => ({ url: item })),
+              },
+            },
+            productOptions: {
+              createMany: {
+                data: [
+                  {
+                    name: 'flavor',
+                    value: 'chocolat',
+                  },
+                  {
+                    name: 'flavor',
+                    value: 'vanilla',
+                  },
+                ],
               },
             },
           },

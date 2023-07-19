@@ -363,7 +363,9 @@ export class OrdersService {
             },
             accessory: {
               type: 'image',
-              image_url: item.productVariant.featuredAsset,
+              image_url:
+                'https://images.alphafit.ma/' +
+                item.productVariant.featuredAsset,
               alt_text: item.productVariant.name,
             },
           })),

@@ -18,6 +18,7 @@ import { UsersModule } from './users/users.module';
 import { AssetsModule } from './assets/assets.module';
 import { ShippingDetailsModule } from './shipping-details/shipping-details.module';
 import { GlobalHttpModule } from './global-http.module';
+import { ProductOptionsModule } from './product-options/product-options.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { GlobalHttpModule } from './global-http.module';
     UsersModule,
     AssetsModule,
     ShippingDetailsModule,
+    ProductOptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

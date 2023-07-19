@@ -38,6 +38,17 @@ type Asset {
   postion: Int!
 }
 
+type ProductOption {
+  """Product option id"""
+  id: String!
+
+  """Product option name"""
+  name: String!
+
+  """Product option value"""
+  value: String!
+}
+
 type ProductVariant {
   """Product variant id"""
   id: ID!
@@ -71,6 +82,9 @@ type ProductVariant {
 
   """Product variant stocklevel"""
   stockLevel: Int!
+
+  """Product variant stocklevel"""
+  productOptions: [ProductOption!]!
 }
 
 type Tag {
@@ -257,6 +271,8 @@ type Query {
   asset(id: Int!): Asset!
   shippingDetails: [ShippingDetail!]!
   shippingDetail(id: Int!): ShippingDetail!
+  productOptions: [ProductOption!]!
+  productOption(id: Int!): ProductOption!
 }
 
 input FilterProductInput {
@@ -319,6 +335,9 @@ type Mutation {
   createShippingDetail(createShippingDetailInput: CreateShippingDetailInput!): ShippingDetail!
   updateShippingDetail(updateShippingDetailInput: UpdateShippingDetailInput!): ShippingDetail!
   removeShippingDetail(id: Int!): ShippingDetail!
+  createProductOption(createProductOptionInput: CreateProductOptionInput!): ProductOption!
+  updateProductOption(updateProductOptionInput: UpdateProductOptionInput!): ProductOption!
+  removeProductOption(id: Int!): ProductOption!
 }
 
 input CreateProductInput {
@@ -475,6 +494,9 @@ input CreateProductVariantInput {
   """Product variant name"""
   name: String!
 
+  """Product reference"""
+  ref: String!
+
   """Product variant description"""
   description: String!
 
@@ -497,6 +519,9 @@ input CreateProductVariantInput {
 input UpdateProductVariantInput {
   """Product variant name"""
   name: String
+
+  """Product reference"""
+  ref: String
 
   """Product variant description"""
   description: String
@@ -557,6 +582,17 @@ input CreateShippingDetailInput {
 }
 
 input UpdateShippingDetailInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateProductOptionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductOptionInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
