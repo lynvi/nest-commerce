@@ -91,7 +91,54 @@ const categories = [
   'Énergies et endurance',
 ];
 
-export const seedData = {
+interface Collection {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  parentId?: string;
+}
+
+interface Brand {
+  id: string;
+  name: string;
+  slug: string;
+  website: string;
+  description: string;
+  logo: string;
+}
+
+interface Variant {
+  name: string;
+  featuredAsset: string;
+  assets: string[];
+  price: number;
+  stockLevel: number;
+  productOptions?: { name: string; value: string }[];
+}
+interface Product {
+  id: string;
+  name: string;
+
+  description: string;
+  slug: string;
+
+  assets?: string[];
+  brandId: string;
+  collectionIds: string[];
+
+  featuredAsset: string;
+
+  price: number;
+  variants: Variant[];
+}
+interface ISeedData {
+  products: Product[];
+  collection: Collection[];
+  brands: Brand[];
+}
+
+export const seedData: ISeedData = {
   collection: [
     {
       id: 'supplements',
@@ -227,7 +274,7 @@ export const seedData = {
       variants: [
         {
           name: 'C4® Original Pre Workout Powder',
-          featuredAsset: ['c4.png'],
+          featuredAsset: 'c4.png',
           assets: ['c4.png'],
           price: 34900,
           stockLevel: 100,
@@ -253,7 +300,7 @@ export const seedData = {
       variants: [
         {
           name: 'Masstech Extreme 2000 2,72Kg',
-          featuredAsset: ['masstech-extreme.png'],
+          featuredAsset: 'masstech-extreme.png',
           assets: ['masstech-extreme.png'],
           price: 60000,
           stockLevel: 100,
@@ -279,7 +326,7 @@ export const seedData = {
       variants: [
         {
           name: '100% Créatine Monohydrate Powder Tesla',
-          featuredAsset: ['tesla-creatine.png'],
+          featuredAsset: 'tesla-creatine.png',
           assets: ['tesla-creatine.png'],
           price: 34900,
           stockLevel: 100,
@@ -305,7 +352,7 @@ export const seedData = {
       variants: [
         {
           name: 'Biotech Wave+ Compact Shaker',
-          featuredAsset: ['shaker-savage.png'],
+          featuredAsset: 'shaker-savage.png',
           assets: ['shaker-savage.png'],
           price: 7900,
           stockLevel: 100,
@@ -332,7 +379,7 @@ export const seedData = {
         {
           name: 'optimum nutrition gold standard 100% whey protein',
           productOptions: [{ name: 'flavor', value: 'vanille' }],
-          featuredAsset: ['nitrotech.png'],
+          featuredAsset: 'nitrotech.png',
           assets: ['gold-standard.png'],
           price: 75000,
           stockLevel: 100,
@@ -355,7 +402,7 @@ export const seedData = {
         {
           name: 'Nitrotech 100% Whey Gold 910g Vanille',
           productOptions: [{ name: 'flavor', value: 'vanille' }],
-          featuredAsset: ['nitrotech.png'],
+          featuredAsset: 'nitrotech.png',
           assets: ['nitrotech.png', 'nitrotech-2.png'],
           price: 75000,
           stockLevel: 100,
@@ -363,7 +410,7 @@ export const seedData = {
         {
           name: 'Nitrotech 100% Whey Gold 910g Chocolat',
           productOptions: [{ name: 'flavor', value: 'chocolat' }],
-          featuredAsset: ['nitrotech.png'],
+          featuredAsset: 'nitrotech.png',
           assets: ['nitrotech.png', 'nitrotech-2.png'],
           price: 75000,
           stockLevel: 100,
@@ -388,7 +435,7 @@ export const seedData = {
         {
           name: 'HYDRO WHEY ZERO Vanille',
           productOptions: [{ name: 'flavor', value: 'vanille' }],
-          featuredAsset: ['hydro-superior14.png'],
+          featuredAsset: 'hydro-superior14.png',
           assets: ['hydro-superior14.png', 'hydro-superior14.png'],
           price: 75000,
           stockLevel: 100,
@@ -396,7 +443,7 @@ export const seedData = {
         {
           name: 'HYDRO WHEY ZERO Chocolat',
           productOptions: [{ name: 'flavor', value: 'chocolat' }],
-          featuredAsset: ['hydro-superior14.png'],
+          featuredAsset: 'hydro-superior14.png',
           assets: ['hydro-superior14.png', 'hydro-superior14.png'],
           price: 75000,
           stockLevel: 100,
@@ -404,6 +451,7 @@ export const seedData = {
       ],
     },
     {
+      brandId: 'cellucor',
       id: 'bande-pakka',
       name: 'BANDE POIGNET PAKKA',
       collectionIds: ['accessories', 'bande'],
@@ -417,7 +465,7 @@ export const seedData = {
       variants: [
         {
           name: 'BANDE POIGNET PAKKA',
-          featuredAsset: ['pakka-bande.png'],
+          featuredAsset: 'pakka-bande.png',
           assets: ['pakka-bande.png'],
           price: 4500,
           stockLevel: 100,
