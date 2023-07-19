@@ -80,9 +80,10 @@ model Product {
   brand            Brand?    @relation(fields: [brandId], references: [id])
   brandId          String?
 
-  featuredAsset   String?
-  assets          Asset[]
-  price           Int
+  featuredAsset String?
+  assets        Asset[]
+  price         Int
+
   productVariants ProductVariant[]
 
   seller   Seller? @relation(fields: [sellerId], references: [id])
@@ -168,11 +169,12 @@ model ProductVariant {
 }
 
 model ProductOption {
-  id               String          @id @default(cuid())
-  name             String
-  value            String
-  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id])
-  productVariantId String?
+  id              String           @id @default(cuid())
+  name            String
+  value           String
+  productVariants ProductVariant[]
+
+  @@unique([name, value])
 }
 
 model Order {

@@ -44,6 +44,7 @@ async function main() {
   const products = seedData.products;
   for (let i = 0; i < products.length; i++) {
     const { collectionIds, featuredAsset, ...product } = products[i];
+
     await prisma.product.create({
       data: {
         ...product,
@@ -75,18 +76,32 @@ async function main() {
               },
             },
             productOptions: {
-              createMany: {
-                data: [
-                  {
+              connectOrCreate: [
+                {
+                  create: {
                     name: 'flavor',
-                    value: 'chocolata',
+                    value: 'strawberry',
                   },
-                  {
+                  where: {
+                    name_value: {
+                      name: 'flavor',
+                      value: 'strawberry',
+                    },
+                  },
+                },
+                {
+                  create: {
                     name: 'flavor',
-                    value: 'vanilla',
+                    value: 'chocolat',
                   },
-                ],
-              },
+                  where: {
+                    name_value: {
+                      name: 'flavor',
+                      value: 'chocolat',
+                    },
+                  },
+                },
+              ],
             },
           },
         },
