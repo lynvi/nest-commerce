@@ -215,7 +215,7 @@ export const seedData = {
 
       description:
         "C4 Original stimule l'énergie explosive, l'endurance et la concentration grâce à une teneur en caféine de 150 mg.",
-      slug: slugify('C4® Original Pre Workout Powder', {
+      slug: slugify('C4 Original Pre Workout Powder', {
         lower: true,
       }),
       brandId: 'cellucor',
@@ -224,6 +224,15 @@ export const seedData = {
       featuredAsset: 'c4.png',
 
       price: 34900,
+      variants: [
+        {
+          name: 'C4® Original Pre Workout Powder',
+          featuredAsset: ['c4.png'],
+          assets: ['c4.png'],
+          price: 34900,
+          stockLevel: 100,
+        },
+      ],
     },
     {
       id: 'masstech-extreme',
@@ -239,7 +248,17 @@ export const seedData = {
 
       featuredAsset: 'masstech-extreme.png',
 
-      price: 34900,
+      price: 60000,
+
+      variants: [
+        {
+          name: 'Masstech Extreme 2000 2,72Kg',
+          featuredAsset: ['masstech-extreme.png'],
+          assets: ['masstech-extreme.png'],
+          price: 60000,
+          stockLevel: 100,
+        },
+      ],
     },
     {
       id: 'TESLA-CREATINE',
@@ -256,6 +275,16 @@ export const seedData = {
       featuredAsset: 'tesla-creatine.png',
 
       price: 34900,
+
+      variants: [
+        {
+          name: '100% Créatine Monohydrate Powder Tesla',
+          featuredAsset: ['tesla-creatine.png'],
+          assets: ['tesla-creatine.png'],
+          price: 34900,
+          stockLevel: 100,
+        },
+      ],
     },
     {
       id: 'SHAKER-BIOTECHUSA',
@@ -273,6 +302,15 @@ export const seedData = {
       featuredAsset: 'shaker-savage.png',
 
       price: 7900,
+      variants: [
+        {
+          name: 'Biotech Wave+ Compact Shaker',
+          featuredAsset: ['shaker-savage.png'],
+          assets: ['shaker-savage.png'],
+          price: 7900,
+          stockLevel: 100,
+        },
+      ],
     },
     {
       id: 'GOLD-STANDARD',
@@ -289,6 +327,17 @@ export const seedData = {
       featuredAsset: 'gold-standard.png',
 
       price: 5000,
+
+      variants: [
+        {
+          name: 'optimum nutrition gold standard 100% whey protein',
+          productOptions: [{ name: 'flavor', value: 'vanille' }],
+          featuredAsset: ['nitrotech.png'],
+          assets: ['gold-standard.png'],
+          price: 75000,
+          stockLevel: 100,
+        },
+      ],
     },
     {
       id: 'NITROTECH',
@@ -334,6 +383,25 @@ export const seedData = {
       brandId: 'superior14',
       featuredAsset: 'hydro-superior14.png',
       price: 75000,
+
+      variants: [
+        {
+          name: 'HYDRO WHEY ZERO Vanille',
+          productOptions: [{ name: 'flavor', value: 'vanille' }],
+          featuredAsset: ['hydro-superior14.png'],
+          assets: ['hydro-superior14.png', 'hydro-superior14.png'],
+          price: 75000,
+          stockLevel: 100,
+        },
+        {
+          name: 'HYDRO WHEY ZERO Chocolat',
+          productOptions: [{ name: 'flavor', value: 'chocolat' }],
+          featuredAsset: ['hydro-superior14.png'],
+          assets: ['hydro-superior14.png', 'hydro-superior14.png'],
+          price: 75000,
+          stockLevel: 100,
+        },
+      ],
     },
     {
       id: 'bande-pakka',
@@ -345,6 +413,16 @@ export const seedData = {
 
       featuredAsset: 'pakka-bande.png',
       price: 4500,
+
+      variants: [
+        {
+          name: 'BANDE POIGNET PAKKA',
+          featuredAsset: ['pakka-bande.png'],
+          assets: ['pakka-bande.png'],
+          price: 4500,
+          stockLevel: 100,
+        },
+      ],
     },
   ],
 };
