@@ -63,7 +63,7 @@ async function main() {
           variants && variants.length > 0
             ? {
                 create: [
-                  ...variants.map((variant) => ({
+                  ...variants.map((variant: any) => ({
                     ref: Math.floor(10000000 + Math.random() * 90000000) + '',
                     name: variant?.name || product.name,
                     description: product.description,
@@ -71,14 +71,14 @@ async function main() {
                     price: variant.price,
                     stockLevel: variant.stockLevel,
 
-                    assets: variant.assets && {
+                    assets: variant?.assets && {
                       createMany: {
                         data: variant?.assets?.map((item) => ({ url: item })),
                       },
                     },
                     productOptions: variant?.productOptions && {
                       connectOrCreate: [
-                        ...variant?.productOptions.map((item) => ({
+                        ...variant?.productOptions.map((item: any) => ({
                           create: {
                             name: item.name,
                             value: item.value,
