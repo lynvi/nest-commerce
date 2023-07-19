@@ -37,4 +37,4 @@ COPY --from=builder /usr/app/prisma ./prisma
 EXPOSE 4000
 
 
-CMD yarn start:migrate:prod
+CMD yarn start:migrate:reset

@@ -79,7 +79,7 @@ async function main() {
                 data: [
                   {
                     name: 'flavor',
-                    value: 'chocolat',
+                    value: 'chocolata',
                   },
                   {
                     name: 'flavor',
