@@ -59,41 +59,43 @@ async function main() {
             data: product?.assets?.map((item) => ({ url: item })),
           },
         },
-        productVariants: variants &&
-          variants.length > 0 && {
-            create: [
-              ...variants.map((variant) => ({
-                ref: Math.floor(10000000 + Math.random() * 90000000) + '',
-                name: variant?.name || product.name,
-                description: product.description,
-                slug: slugify(product.slug),
-                price: variant.price,
-                stockLevel: variant.stockLevel,
+        productVariants:
+          variants && variants.length > 0
+            ? {
+                create: [
+                  ...variants.map((variant) => ({
+                    ref: Math.floor(10000000 + Math.random() * 90000000) + '',
+                    name: variant?.name || product.name,
+                    description: product.description,
+                    slug: slugify(product.slug),
+                    price: variant.price,
+                    stockLevel: variant.stockLevel,
 
-                assets: variant.assets && {
-                  createMany: {
-                    data: variant?.assets?.map((item) => ({ url: item })),
-                  },
-                },
-                productOptions: variant?.productOptions && {
-                  connectOrCreate: [
-                    ...variant?.productOptions.map((item) => ({
-                      create: {
-                        name: item.name,
-                        value: item.value,
+                    assets: variant.assets && {
+                      createMany: {
+                        data: variant?.assets?.map((item) => ({ url: item })),
                       },
-                      where: {
-                        name_value: {
-                          name: item.name,
-                          value: item.value,
-                        },
-                      },
-                    })),
-                  ],
-                },
-              })),
-            ],
-          },
+                    },
+                    productOptions: variant?.productOptions && {
+                      connectOrCreate: [
+                        ...variant?.productOptions.map((item) => ({
+                          create: {
+                            name: item.name,
+                            value: item.value,
+                          },
+                          where: {
+                            name_value: {
+                              name: item.name,
+                              value: item.value,
+                            },
+                          },
+                        })),
+                      ],
+                    },
+                  })),
+                ],
+              }
+            : {},
       },
     });
 
