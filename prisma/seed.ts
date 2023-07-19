@@ -73,7 +73,9 @@ async function main() {
 
                     assets: variant?.assets && {
                       createMany: {
-                        data: variant?.assets?.map((item) => ({ url: item })),
+                        data: variant?.assets?.map((item: any) => ({
+                          url: item,
+                        })),
                       },
                     },
                     productOptions: variant?.productOptions && {
@@ -95,7 +97,7 @@ async function main() {
                   })),
                 ],
               }
-            : {},
+            : undefined,
       },
     });
 
