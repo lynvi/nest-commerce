@@ -258,7 +258,7 @@ export const seedData: ISeedData = {
   products: [
     {
       id: 'c4',
-      name: 'C4® Original Pre Workout Powder',
+      name: 'C3® Original Pre Workout Powder',
 
       description:
         "C4 Original stimule l'énergie explosive, l'endurance et la concentration grâce à une teneur en caféine de 150 mg.",
