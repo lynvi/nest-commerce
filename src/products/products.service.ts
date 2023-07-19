@@ -63,14 +63,11 @@ export class ProductsService {
         },
       ],
       where: {
-        productVariants: {
-          some: {
-            AND: [
-              { price: { lte: filter?.maxPrice } },
-              { price: { gte: filter?.minPrice } },
-            ],
-          },
-        },
+        AND: [
+          { price: { lte: filter?.maxPrice } },
+          { price: { gte: filter?.minPrice } },
+        ],
+
         brandId: filter?.brandId,
         collections: filter?.collectionSlug
           ? { some: { slug: filter.collectionSlug } }

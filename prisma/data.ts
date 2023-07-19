@@ -296,7 +296,7 @@ export const seedData = {
       collectionIds: ['protein', 'supplements'],
       description:
         'Peptides de lactosérum hydrolysés à absorption rapide , concentré pour un profil supérieur ',
-      slug: slugify('Nitrotech 100%Whey Gold 910g - Muscletech', {
+      slug: slugify('Nitrotech 100 whey Gold 910g - Muscletech', {
         lower: true,
       }),
       brandId: 'muscletech',
@@ -306,10 +306,18 @@ export const seedData = {
         {
           name: 'Nitrotech 100% Whey Gold 910g Vanille',
           productOptions: [{ name: 'flavor', value: 'vanille' }],
+          featuredAsset: ['nitrotech.png'],
+          assets: ['nitrotech.png', 'nitrotech-2.png'],
+          price: 75000,
+          stockLevel: 100,
         },
         {
           name: 'Nitrotech 100% Whey Gold 910g Chocolat',
           productOptions: [{ name: 'flavor', value: 'chocolat' }],
+          featuredAsset: ['nitrotech.png'],
+          assets: ['nitrotech.png', 'nitrotech-2.png'],
+          price: 75000,
+          stockLevel: 100,
         },
       ],
       price: 75000,

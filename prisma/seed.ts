@@ -43,7 +43,7 @@ async function main() {
 
   const products = seedData.products;
   for (let i = 0; i < products.length; i++) {
-    const { collectionIds, featuredAsset, ...product } = products[i];
+    const { collectionIds, featuredAsset, variants, ...product } = products[i];
 
     await prisma.product.create({
       data: {
@@ -59,52 +59,43 @@ async function main() {
             data: product?.assets?.map((item) => ({ url: item })),
           },
         },
-        productVariants: {
-          create: {
-            ref: Math.floor(10000000 + Math.random() * 90000000) + '',
-            id: product.id,
-            name: product.name,
-            description: product.description,
-            slug: slugify(product.slug),
-            price: product.price,
-            stockLevel: 120,
-            featuredAsset,
+        productVariants:
+          variants && variants.length > 0
+            ? {
+                create: [
+                  ...variants.map((variant) => ({
+                    ref: Math.floor(10000000 + Math.random() * 90000000) + '',
+                    name: variant?.name || product.name,
+                    description: product.description,
+                    slug: slugify(product.slug),
+                    price: variant.price,
+                    stockLevel: variant.stockLevel,
 
-            assets: product.assets && {
-              createMany: {
-                data: product?.assets?.map((item) => ({ url: item })),
-              },
-            },
-            productOptions: {
-              connectOrCreate: [
-                {
-                  create: {
-                    name: 'flavor',
-                    value: 'strawberry',
-                  },
-                  where: {
-                    name_value: {
-                      name: 'flavor',
-                      value: 'strawberry',
+                    assets: variant.assets && {
+                      createMany: {
+                        data: variant?.assets?.map((item) => ({ url: item })),
+                      },
                     },
-                  },
-                },
-                {
-                  create: {
-                    name: 'flavor',
-                    value: 'chocolat',
-                  },
-                  where: {
-                    name_value: {
-                      name: 'flavor',
-                      value: 'chocolat',
+                    productOptions: variant?.productOptions && {
+                      connectOrCreate: [
+                        ...variant?.productOptions.map((item) => ({
+                          create: {
+                            name: item.name,
+                            value: item.value,
+                          },
+                          where: {
+                            name_value: {
+                              name: item.name,
+                              value: item.value,
+                            },
+                          },
+                        })),
+                      ],
                     },
-                  },
-                },
-              ],
-            },
-          },
-        },
+                  })),
+                ],
+              }
+            : {},
       },
     });
 
