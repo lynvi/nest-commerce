@@ -9,10 +9,6 @@ export class AppService {
     private configService: ConfigService,
   ) {}
   getHello(): string {
-    const orderChannelWebhoolUrl = this.configService.get(
-      'slack.ordersChannel',
-    );
-
     return 'You have reach our api root endpoint, if you are fullstack developer (react + nodejs) ping us careers@alphafit.ma .';
   }
 

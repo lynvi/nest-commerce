@@ -388,7 +388,7 @@ export class OrdersService {
       );
 
       const request = await lastValueFrom(
-        this.httpService.post(orderChannelWebhoolUrl.orderToSlackMessage),
+        this.httpService.post(orderChannelWebhoolUrl, orderToSlackMessage),
       );
 
       return await this.prismaService.order.findUnique({
