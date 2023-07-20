@@ -69,7 +69,7 @@ async function main() {
               slug: slugify(product.slug),
               price: variant.price,
               stockLevel: variant.stockLevel,
-
+              featuredAsset,
               assets: variant.assets && {
                 createMany: {
                   data: variant?.assets?.map((item) => ({ url: item })),
