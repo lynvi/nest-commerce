@@ -5,6 +5,7 @@ FROM node:18-alpine as builder
 WORKDIR /usr/app
 
 COPY package*.json ./
+COPY yarn.lock ./
 
 RUN yarn install
 
@@ -37,4 +38,4 @@ COPY --from=builder /usr/app/prisma ./prisma
 EXPOSE 4000
 
 
-CMD yarn start:migrate:reset
+CMD yarn ts-node --version && yarn start:migrate:reset
