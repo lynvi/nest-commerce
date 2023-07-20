@@ -402,8 +402,8 @@ export const seedData: ISeedData = {
         {
           name: 'Nitrotech 100% Whey Gold 910g Vanille',
           productOptions: [{ name: 'flavor', value: 'vanille' }],
-          featuredAsset: 'nitrotech.png',
-          assets: ['nitrotech.png', 'nitrotech-2.png'],
+          featuredAsset: 'nitrotech-vanilla.png',
+          assets: ['nitrotech-vanilla.png', 'nitrotech-vanilla.png'],
           price: 75000,
           stockLevel: 100,
         },
