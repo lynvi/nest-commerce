@@ -247,10 +247,10 @@ enum OrderStatus {
 
 type SearchResults {
   """brands"""
-  brands: [Brand!]
+  brands: [Brand!]!
 
   """product"""
-  products: [Product!]
+  products: [Product!]!
 }
 
 type Query {
