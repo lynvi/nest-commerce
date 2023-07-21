@@ -6,6 +6,8 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { GraphQLResolveInfo } from 'graphql';
 import { Prisma } from '@prisma/client';
 import { FilterProductInput } from './dto/filter-product.input';
+import { SearchInput } from './dto/search.input';
+import { SearchResults } from './entities/search-results.entity';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -25,6 +27,14 @@ export class ProductsResolver {
     @Args('filterProductInput', { nullable: true }) filter: FilterProductInput,
   ) {
     return this.productsService.findAll(info, filter);
+  }
+
+  @Query(() => SearchResults, { name: 'search' })
+  search(
+    @Info() info: GraphQLResolveInfo,
+    @Args('searchInput', { nullable: true }) filter: SearchInput,
+  ) {
+    return this.productsService.search(filter);
   }
 
   @Query(() => Product, { name: 'product', nullable: true })

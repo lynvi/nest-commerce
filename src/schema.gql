@@ -245,8 +245,17 @@ enum OrderStatus {
   DELIVERED
 }
 
+type SearchResults {
+  """brands"""
+  brands: [Brand!]
+
+  """product"""
+  products: [Product!]
+}
+
 type Query {
   products(filterProductInput: FilterProductInput): [Product!]!
+  search(searchInput: SearchInput): SearchResults!
   product(id: String, slug: String): Product
   brands: [Brand!]!
   brand(
@@ -298,6 +307,11 @@ input FilterProductInput {
 enum SortOrder {
   asc
   desc
+}
+
+input SearchInput {
+  """search term"""
+  term: String!
 }
 
 type Mutation {

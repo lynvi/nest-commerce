@@ -10,6 +10,8 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateProductInput } from './dto/create-product.input';
 import { FilterProductInput } from './dto/filter-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
+import { SearchInput } from './dto/search.input';
+import { cleanUpSpecialChars } from 'src/utils';
 
 @Injectable()
 export class ProductsService {
@@ -113,6 +115,30 @@ export class ProductsService {
         }
       }
     }
+  }
+
+  async search(input: SearchInput) {
+    const term = cleanUpSpecialChars(input.term);
+
+    const products = await this.prismaService.product.findMany({
+      where: {
+        slug: {
+          mode: 'insensitive',
+          contains: term,
+        },
+      },
+    });
+
+    const brands = await this.prismaService.brand.findMany({
+      where: {
+        slug: {
+          mode: 'insensitive',
+          contains: term,
+        },
+      },
+    });
+
+    return { brands, products };
   }
 }
 
