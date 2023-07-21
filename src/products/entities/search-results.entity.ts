@@ -4,9 +4,9 @@ import { Product } from './product.entity';
 
 @ObjectType()
 export class SearchResults {
-  @Field(() => [Brand], { description: 'brands', nullable: true })
+  @Field(() => [Brand], { description: 'brands' })
   brands: Brand[];
 
-  @Field(() => [Product], { description: 'product', nullable: true })
+  @Field(() => [Product], { description: 'product' })
   products: Brand[];
 }

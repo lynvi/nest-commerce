@@ -30,6 +30,7 @@ export class ProductsResolver {
   }
 
   @Query(() => SearchResults, { name: 'search' })
+  //TODO :"Implement typesense https://github.com/typesense/typesense"
   search(
     @Info() info: GraphQLResolveInfo,
     @Args('searchInput', { nullable: true }) filter: SearchInput,
