@@ -123,8 +123,7 @@ export class ProductsService {
     const products = await this.prismaService.product.findMany({
       where: {
         slug: {
-          mode: 'insensitive',
-          contains: term,
+          search: term.replace(' ', '|'),
         },
       },
     });
@@ -132,8 +131,9 @@ export class ProductsService {
     const brands = await this.prismaService.brand.findMany({
       where: {
         slug: {
-          mode: 'insensitive',
-          contains: term,
+          search: term.replace(' ', '|'),
+          // mode: 'insensitive',
+          // contains: term,
         },
       },
     });
