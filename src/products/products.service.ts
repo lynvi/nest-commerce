@@ -121,6 +121,13 @@ export class ProductsService {
     const term = cleanUpSpecialChars(input.term);
 
     const products = await this.prismaService.product.findMany({
+      include: {
+        productVariants: {
+          include: {
+            productOptions: true,
+          },
+        },
+      },
       where: {
         slug: {
           search: term.replace(' ', '|'),
