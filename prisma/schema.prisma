@@ -84,6 +84,7 @@ model Product {
   featuredAsset String?
   assets        Asset[]
   price         Int
+  salesPrice    Int?
 
   productVariants ProductVariant[]
 
@@ -161,6 +162,7 @@ model ProductVariant {
   productId      String?
   price          Int             @default(0)
   slug           String
+  salesPrice     Int?
   stockLevel     Int             @default(1)
   sku            String?
   description    String?
