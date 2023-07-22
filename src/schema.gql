@@ -77,8 +77,11 @@ type ProductVariant {
   """Product variant product id"""
   productId: String!
 
-  """Product variant product id"""
+  """normal price"""
   price: Int!
+
+  """sales price"""
+  salesPrice: Int!
 
   """Product variant stocklevel"""
   stockLevel: Int!

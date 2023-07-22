@@ -38,8 +38,11 @@ export class ProductVariant {
   @Field(() => String, { description: 'Product variant product id' })
   productId: string;
 
-  @Field(() => Int, { description: 'Product variant product id' })
+  @Field(() => Int, { description: 'normal price' })
   price: number;
+
+  @Field(() => Int, { description: 'sales price' })
+  salesPrice: number;
 
   @Field(() => Int, { description: 'Product variant stocklevel' })
   stockLevel: number;
