@@ -20,12 +20,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate:reset": "yarn prisma migrate reset && yarn seed",
+    "migrate:reset": "yarn prisma migrate reset --force && yarn seed",
     "migrate:dev": "yarn prisma migrate dev",
     "prisma:generate": "yarn prisma generate",
     "prisma:studio": "yarn prisma studio",
     "start:migrate:prod": "prisma migrate deploy && yarn start:prod",
-    "start:migrate:reset": "prisma migrate deploy && prisma migrate reset --force &&  yarn seed && yarn start:prod"
+    "start:migrate:reset": "prisma migrate deploy && yarn migrate:reset --force && yarn start:prod"
   },
   "dependencies": {
     "@fastify/cookie": "^8.3.0",

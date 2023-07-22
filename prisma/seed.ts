@@ -66,6 +66,7 @@ async function main() {
               ref: Math.floor(10000000 + Math.random() * 90000000) + '',
               name: variant?.name || product.name,
               description: product.description,
+              salesPrice: variant?.salesPrice,
               slug: slugify(product.slug),
               price: variant.price,
               stockLevel: variant.stockLevel,
@@ -132,6 +133,9 @@ async function main() {
 }
 
 main()
+  .then((e) => {
+    console.log('Done seeding database');
+  })
   .catch((e) => console.error(e))
   .finally(async () => {
     await prisma.$disconnect();
