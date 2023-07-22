@@ -40,6 +40,6 @@ export class Product {
   @Field((type) => [Collection], { nullable: true })
   collections?: Collection[];
 
-  @Field((type) => [ProductVariant], { nullable: true })
-  productVariants?: ProductVariant[];
+  @Field((type) => [ProductVariant])
+  productVariants: ProductVariant[];
 }
