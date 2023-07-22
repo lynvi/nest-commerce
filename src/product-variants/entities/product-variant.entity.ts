@@ -41,7 +41,7 @@ export class ProductVariant {
   @Field(() => Int, { description: 'normal price' })
   price: number;
 
-  @Field(() => Int, { description: 'sales price' })
+  @Field(() => Int, { description: 'sales price', nullable: true })
   salesPrice: number;
 
   @Field(() => Int, { description: 'Product variant stocklevel' })

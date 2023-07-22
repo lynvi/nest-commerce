@@ -113,6 +113,7 @@ interface Variant {
   featuredAsset: string;
   assets: string[];
   price: number;
+  salesPrice?: number;
   stockLevel: number;
   productOptions?: { name: string; value: string }[];
 }
@@ -330,6 +331,7 @@ export const seedData: ISeedData = {
           assets: ['tesla-creatine.png'],
           price: 34900,
           stockLevel: 100,
+          salesPrice: 40000,
         },
       ],
     },
