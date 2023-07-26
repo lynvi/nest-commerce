@@ -37,7 +37,7 @@ export class BrandsService {
   findOne(id: string, info: GraphQLResolveInfo) {
     const select = new PrismaSelect(info).value;
     return this.prismaService.brand.findFirst({
-      where: { OR: [{ id, slug: id }] },
+      where: { OR: [{ id }, { slug: id }] },
       ...select,
     });
   }

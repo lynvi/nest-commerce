@@ -34,6 +34,20 @@ export class FilterProductInput {
   })
   orderBy: string;
 
+  @Field(() => Int, {
+    description: 'page number ',
+    nullable: true,
+    defaultValue: 0,
+  })
+  page: number;
+
+  @Field(() => Int, {
+    description: 'items to return ',
+    nullable: true,
+    defaultValue: 10,
+  })
+  take: number;
+
   @Field(() => Prisma.SortOrder, {
     description: 'order by ',
     nullable: true,

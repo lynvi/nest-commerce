@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int, Info } from '@nestjs/graphql';
 import { ProductsService } from './products.service';
-import { Product } from './entities/product.entity';
+import { PaginatedProduct, Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { GraphQLResolveInfo } from 'graphql';
@@ -21,7 +21,7 @@ export class ProductsResolver {
     return this.productsService.create(createProductInput, info);
   }
 
-  @Query(() => [Product], { name: 'products' })
+  @Query(() => PaginatedProduct, { name: 'products' })
   findAll(
     @Info() info: GraphQLResolveInfo,
     @Args('filterProductInput', { nullable: true }) filter: FilterProductInput,

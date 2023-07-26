@@ -43,3 +43,21 @@ export class Product {
   @Field((type) => [ProductVariant])
   productVariants: ProductVariant[];
 }
+
+@ObjectType()
+export class PaginatedProduct {
+  @Field(() => Int, { description: 'total products' })
+  totalItems: number;
+
+  @Field(() => Int, { description: 'total pages' })
+  totalPages: number;
+
+  @Field(() => Int, { description: 'page number' })
+  page: number;
+
+  @Field(() => Int, { description: 'page number' })
+  take: number;
+
+  @Field(() => [Product], { description: 'Products' })
+  items: Product[];
+}

@@ -81,7 +81,7 @@ type ProductVariant {
   price: Int!
 
   """sales price"""
-  salesPrice: Int!
+  salesPrice: Int
 
   """Product variant stocklevel"""
   stockLevel: Int!
@@ -123,7 +123,24 @@ type Product {
   seller: Brand
   tags: [Tag!]
   collections: [Collection!]
-  productVariants: [ProductVariant!]
+  productVariants: [ProductVariant!]!
+}
+
+type PaginatedProduct {
+  """total products"""
+  totalItems: Int!
+
+  """total pages"""
+  totalPages: Int!
+
+  """page number"""
+  page: Int!
+
+  """page number"""
+  take: Int!
+
+  """Products"""
+  items: [Product!]!
 }
 
 type Collection {
@@ -257,7 +274,7 @@ type SearchResults {
 }
 
 type Query {
-  products(filterProductInput: FilterProductInput): [Product!]!
+  products(filterProductInput: FilterProductInput): PaginatedProduct!
   search(searchInput: SearchInput): SearchResults!
   product(id: String, slug: String): Product
   brands: [Brand!]!
@@ -302,6 +319,12 @@ input FilterProductInput {
 
   """order by """
   orderBy: String
+
+  """page number """
+  page: Int = 0
+
+  """items to return """
+  take: Int = 10
 
   """order by """
   sortOrder: SortOrder = asc

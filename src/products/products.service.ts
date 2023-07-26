@@ -54,11 +54,32 @@ export class ProductsService {
     }
   }
 
-  findAll(info: GraphQLResolveInfo, filter: FilterProductInput) {
-    const select = new PrismaSelect(info).value;
+  async findAll(info: GraphQLResolveInfo, filter: FilterProductInput) {
+    const { select } = new PrismaSelect(info).value;
 
-    return this.prismaService.product.findMany({
-      ...select,
+    const { take, totalItems, totalPages, page, items, ...selected } = select;
+
+    const totalProducts = await this.prismaService.product.count({
+      where: {
+        AND: [
+          { price: { lte: filter?.maxPrice } },
+          { price: { gte: filter?.minPrice } },
+        ],
+
+        brandId: filter?.brandId,
+        collections: filter?.collectionSlug
+          ? { some: { slug: filter.collectionSlug } }
+          : undefined,
+      },
+    });
+
+    const products = await this.prismaService.product.findMany({
+      skip: (filter.page - 1) * filter.take,
+      take: filter.take,
+      select: {
+        _count: true,
+        ...items.select,
+      },
       orderBy: [
         filter.orderBy && {
           [filter.orderBy]: filter.sortOrder,
@@ -76,6 +97,14 @@ export class ProductsService {
           : undefined,
       },
     });
+
+    return {
+      page: filter.page,
+      take: filter.take,
+      totalItems: totalProducts,
+      totalPages: Math.ceil(totalProducts / filter.take),
+      items: products,
+    };
   }
 
   async findOne(info: GraphQLResolveInfo, id?: string, slug?: string) {
