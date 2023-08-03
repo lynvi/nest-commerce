@@ -12,5 +12,11 @@ export class AddShippingToOrderInput {
   zipCode?: string;
 
   @Field(() => String, { description: '', nullable: true })
+  firstName?: string;
+
+  @Field(() => String, { description: '', nullable: true })
+  lastName?: string;
+
+  @Field(() => String, { description: '', nullable: true })
   phoneNumber?: string;
 }

@@ -37,7 +37,7 @@ export class FilterProductInput {
   @Field(() => Int, {
     description: 'page number ',
     nullable: true,
-    defaultValue: 0,
+    defaultValue: 1,
   })
   page: number;
 

@@ -321,7 +321,7 @@ input FilterProductInput {
   orderBy: String
 
   """page number """
-  page: Int = 0
+  page: Int = 1
 
   """items to return """
   take: Int = 10

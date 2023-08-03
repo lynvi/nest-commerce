@@ -246,7 +246,10 @@ export class OrdersService {
       data: {
         shippingDetail: {
           create: {
+            userId: session?.activeOrder?.userId || null,
             city: addShippingToOrder.city,
+            firstName: addShippingToOrder?.firstName,
+            lastName: addShippingToOrder?.lastName,
             phoneNumber: addShippingToOrder.phoneNumber,
             zipCode: addShippingToOrder.zipCode,
             streetAddress: addShippingToOrder.street,
