@@ -39,4 +39,4 @@ COPY --from=builder /usr/app/prisma ./prisma
 EXPOSE 4000
 
 
-CMD yarn ts-node --version && yarn start:migrate:reset
+CMD yarn ts-node --version && yarn start:migrate:prod
