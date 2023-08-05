@@ -43,6 +43,24 @@ model Collection {
   seoContent  String?
 }
 
+model Language {
+  id                    String                  @id @default(cuid())
+  name                  String
+  code                  String                  @unique
+  CollectionTranslation CollectionTranslation[]
+}
+
+model CollectionTranslation {
+  id          String   @id @default(cuid())
+  language    Language @relation(fields: [languageId], references: [id])
+  languageId  String
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  position    Int?     @default(0)
+  seoContent  String?
+}
+
 model Seller {
   id       String    @id @default(cuid())
   name     String
@@ -83,7 +101,7 @@ model Product {
 
   featuredAsset String?
   assets        Asset[]
-  price         Int
+  price         Int?
   salesPrice    Int?
 
   productVariants ProductVariant[]
