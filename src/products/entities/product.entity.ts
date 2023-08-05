@@ -20,6 +20,18 @@ export class Product {
   description: string;
 
   @Field(() => String, {
+    description: 'average variant  price',
+    nullable: true,
+  })
+  price: string;
+
+  @Field(() => String, {
+    description: 'average variant sales price ',
+    nullable: true,
+  })
+  salesPrice: string;
+
+  @Field(() => String, {
     description: 'product featured  asset',
     nullable: true,
   })
