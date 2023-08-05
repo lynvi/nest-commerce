@@ -381,6 +381,9 @@ type Mutation {
 }
 
 input CreateProductInput {
+  """Product featured asset"""
+  featuredAsset: String
+
   """Product name"""
   name: String!
 
@@ -401,6 +404,9 @@ input CreateProductInput {
 }
 
 input UpdateProductInput {
+  """Product featured asset"""
+  featuredAsset: String
+
   """Product name"""
   name: String
 
@@ -525,6 +531,12 @@ input AddShippingToOrderInput {
 
   """"""
   zipCode: String
+
+  """"""
+  firstName: String
+
+  """"""
+  lastName: String
 
   """"""
   phoneNumber: String
