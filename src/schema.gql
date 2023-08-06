@@ -114,6 +114,12 @@ type Product {
   """product description"""
   description: String
 
+  """average variant  price"""
+  price: String
+
+  """average variant sales price """
+  salesPrice: String
+
   """product featured  asset"""
   featuredAsset: String
 

@@ -9,6 +9,7 @@ import cookie, { FastifyCookieOptions } from '@fastify/cookie';
 import { IConfig } from './config/config.interface';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import multipart from '@fastify/multipart';
 
 function loggingMiddleware(req, res, next) {
   if (req.url.startsWith('/graphql')) {
@@ -45,6 +46,7 @@ async function bootstrap() {
   });
 
   app.use(loggingMiddleware);
+  await app.register(multipart);
 
   const PORT = process.env.PORT || 4000;
   await app.listen(PORT, '0.0.0.0');
