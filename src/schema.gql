@@ -559,7 +559,7 @@ input CreateProductVariantInput {
   description: String!
 
   """Product variant image"""
-  image: String!
+  featuredAsset: String!
 
   """Product variant slug"""
   slug: String!
@@ -569,6 +569,9 @@ input CreateProductVariantInput {
 
   """Product variant product id"""
   price: Int!
+
+  """Product variant sales price"""
+  salesPrice: Int!
 
   """Product variant stocklevel"""
   stockLevel: Int!
@@ -585,7 +588,7 @@ input UpdateProductVariantInput {
   description: String
 
   """Product variant image"""
-  image: String
+  featuredAsset: String
 
   """Product variant slug"""
   slug: String
@@ -595,6 +598,9 @@ input UpdateProductVariantInput {
 
   """Product variant product id"""
   price: Int
+
+  """Product variant sales price"""
+  salesPrice: Int
 
   """Product variant stocklevel"""
   stockLevel: Int
