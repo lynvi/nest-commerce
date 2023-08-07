@@ -17,6 +17,12 @@ export class CreateProductInput {
   @Field(() => String, { description: 'Product description' })
   description: string;
 
+  @Field(() => String, {
+    description: 'Product long description',
+    nullable: true,
+  })
+  long_description: string;
+
   @Field(() => String, { description: 'Product brand id' })
   brandId: string;
 
