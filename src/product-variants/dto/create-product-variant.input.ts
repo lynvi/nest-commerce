@@ -11,7 +11,7 @@ export class CreateProductVariantInput {
   description: string;
 
   @Field(() => String, { description: 'Product variant image' })
-  image: string;
+  featuredAsset: string;
 
   @Field(() => String, { description: 'Product variant slug' })
   slug: string;
@@ -21,6 +21,9 @@ export class CreateProductVariantInput {
 
   @Field(() => Int, { description: 'Product variant product id' })
   price: number;
+
+  @Field(() => Int, { description: 'Product variant sales price' })
+  salesPrice: number;
 
   @Field(() => Int, { description: 'Product variant stocklevel' })
   stockLevel: number;

@@ -114,6 +114,12 @@ type Product {
   """product description"""
   description: String
 
+  """average variant  price"""
+  price: String
+
+  """average variant sales price """
+  salesPrice: String
+
   """product featured  asset"""
   featuredAsset: String
 
@@ -381,6 +387,9 @@ type Mutation {
 }
 
 input CreateProductInput {
+  """Product featured asset"""
+  featuredAsset: String
+
   """Product name"""
   name: String!
 
@@ -401,6 +410,9 @@ input CreateProductInput {
 }
 
 input UpdateProductInput {
+  """Product featured asset"""
+  featuredAsset: String
+
   """Product name"""
   name: String
 
@@ -527,6 +539,12 @@ input AddShippingToOrderInput {
   zipCode: String
 
   """"""
+  firstName: String
+
+  """"""
+  lastName: String
+
+  """"""
   phoneNumber: String
 }
 
@@ -541,7 +559,7 @@ input CreateProductVariantInput {
   description: String!
 
   """Product variant image"""
-  image: String!
+  featuredAsset: String!
 
   """Product variant slug"""
   slug: String!
@@ -551,6 +569,9 @@ input CreateProductVariantInput {
 
   """Product variant product id"""
   price: Int!
+
+  """Product variant sales price"""
+  salesPrice: Int!
 
   """Product variant stocklevel"""
   stockLevel: Int!
@@ -567,7 +588,7 @@ input UpdateProductVariantInput {
   description: String
 
   """Product variant image"""
-  image: String
+  featuredAsset: String
 
   """Product variant slug"""
   slug: String
@@ -577,6 +598,9 @@ input UpdateProductVariantInput {
 
   """Product variant product id"""
   price: Int
+
+  """Product variant sales price"""
+  salesPrice: Int
 
   """Product variant stocklevel"""
   stockLevel: Int

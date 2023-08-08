@@ -9,6 +9,7 @@ import cookie, { FastifyCookieOptions } from '@fastify/cookie';
 import { IConfig } from './config/config.interface';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import multipart from '@fastify/multipart';
 
 function loggingMiddleware(req, res, next) {
   if (req.url.startsWith('/graphql')) {
@@ -34,7 +35,7 @@ async function bootstrap() {
     origin: [
       'storefront-nkd6qaz8i-aboukinanee.vercel.app',
       'https://storefront-tawny-one.vercel.app',
-
+      'https://testing.alphafit.ma',
       'https://devlop.alphafit.ma',
       'https://v1.alphafit.ma',
       'https://alphafit.ma',
@@ -45,6 +46,7 @@ async function bootstrap() {
   });
 
   app.use(loggingMiddleware);
+  await app.register(multipart);
 
   const PORT = process.env.PORT || 4000;
   await app.listen(PORT, '0.0.0.0');

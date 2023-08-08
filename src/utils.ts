@@ -1,4 +1,5 @@
 import { string } from 'joi';
+import { customAlphabet } from 'nanoid';
 
 export const formatedPrice = (price: number) => {
   return new Intl.NumberFormat('fr', {
@@ -17,3 +18,8 @@ export function cleanUpSpecialChars(str: string) {
       .replace(/[^a-z0-9]/gi, '')
   ); // final clean up
 }
+
+export const nanoid = customAlphabet(
+  '1234567890qwertyuiopasdfghjklzxcvbnQWERTYUIOPLKJHGFDSAZXCVBN',
+  10,
+);

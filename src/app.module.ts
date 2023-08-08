@@ -19,6 +19,7 @@ import { AssetsModule } from './assets/assets.module';
 import { ShippingDetailsModule } from './shipping-details/shipping-details.module';
 import { GlobalHttpModule } from './global-http.module';
 import { ProductOptionsModule } from './product-options/product-options.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { ProductOptionsModule } from './product-options/product-options.module';
     AssetsModule,
     ShippingDetailsModule,
     ProductOptionsModule,
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
