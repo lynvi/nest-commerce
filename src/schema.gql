@@ -399,6 +399,9 @@ input CreateProductInput {
   """Product description"""
   description: String!
 
+  """Product long description"""
+  long_description: String
+
   """Product brand id"""
   brandId: String!
 
@@ -421,6 +424,9 @@ input UpdateProductInput {
 
   """Product description"""
   description: String
+
+  """Product long description"""
+  long_description: String
 
   """Product brand id"""
   brandId: String
@@ -570,11 +576,22 @@ input CreateProductVariantInput {
   """Product variant product id"""
   price: Int!
 
+  """Product options"""
+  productOptions: [CreateProductOptionInput!]!
+
   """Product variant sales price"""
   salesPrice: Int!
 
   """Product variant stocklevel"""
   stockLevel: Int!
+}
+
+input CreateProductOptionInput {
+  """Example field (placeholder)"""
+  name: String!
+
+  """Example field (placeholder)"""
+  value: String!
 }
 
 input UpdateProductVariantInput {
@@ -598,6 +615,9 @@ input UpdateProductVariantInput {
 
   """Product variant product id"""
   price: Int
+
+  """Product options"""
+  productOptions: [CreateProductOptionInput!]
 
   """Product variant sales price"""
   salesPrice: Int
@@ -651,13 +671,11 @@ input UpdateShippingDetailInput {
   id: Int!
 }
 
-input CreateProductOptionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 input UpdateProductOptionInput {
   """Example field (placeholder)"""
-  exampleField: Int
+  name: String
+
+  """Example field (placeholder)"""
+  value: String
   id: Int!
 }

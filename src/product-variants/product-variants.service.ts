@@ -8,7 +8,25 @@ export class ProductVariantsService {
   constructor(private prismaService: PrismaService) {}
   create(createProductVariantInput: CreateProductVariantInput) {
     return this.prismaService.productVariant.create({
-      data: createProductVariantInput,
+      data: {
+        ...createProductVariantInput,
+        productOptions: createProductVariantInput?.productOptions && {
+          connectOrCreate: [
+            ...createProductVariantInput?.productOptions.map((item) => ({
+              create: {
+                name: item.name,
+                value: item.value,
+              },
+              where: {
+                name_value: {
+                  name: item.name,
+                  value: item.value,
+                },
+              },
+            })),
+          ],
+        },
+      },
     });
   }
 

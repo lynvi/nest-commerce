@@ -11,6 +11,9 @@ export class CreateBrandInput {
   @Field(() => String, { description: 'Brand logo' })
   logo: string;
 
+  @Field(() => String, { description: 'Brand website' })
+  website: string;
+
   @Field(() => String, { description: 'Brand slug' })
   slug: string;
 }

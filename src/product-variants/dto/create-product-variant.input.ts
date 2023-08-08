@@ -1,4 +1,6 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
+import { CreateProductOptionInput } from 'src/product-options/dto/create-product-option.input';
+import { ProductOption } from 'src/product-options/entities/product-option.entity';
 
 @InputType()
 export class CreateProductVariantInput {
@@ -21,6 +23,9 @@ export class CreateProductVariantInput {
 
   @Field(() => Int, { description: 'Product variant product id' })
   price: number;
+
+  @Field(() => [CreateProductOptionInput], { description: 'Product options' })
+  productOptions: CreateProductOptionInput[];
 
   @Field(() => Int, { description: 'Product variant sales price' })
   salesPrice: number;
