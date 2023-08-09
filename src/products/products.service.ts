@@ -30,7 +30,7 @@ export class ProductsService {
           ...input,
           tags: {
             connectOrCreate: [
-              ...input.tags.map((tag) => ({
+              ...input?.tags?.map((tag) => ({
                 create: { name: tag },
                 where: { name: tag },
               })),
