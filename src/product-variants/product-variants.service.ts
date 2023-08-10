@@ -38,8 +38,34 @@ export class ProductVariantsService {
     return `This action returns a #${id} productVariant`;
   }
 
-  update(id: number, updateProductVariantInput: UpdateProductVariantInput) {
-    return `This action updates a #${id} productVariant`;
+  update(id: string, updateProductVariantInput: UpdateProductVariantInput) {
+    return this.prismaService.productVariant.update({
+      include: {
+        productOptions: true,
+      },
+      where: {
+        id,
+      },
+      data: {
+        ...(updateProductVariantInput as any),
+        productOptions: updateProductVariantInput?.productOptions && {
+          connectOrCreate: [
+            ...updateProductVariantInput?.productOptions.map((item) => ({
+              create: {
+                name: item.name,
+                value: item.value,
+              },
+              where: {
+                name_value: {
+                  name: item.name,
+                  value: item.value,
+                },
+              },
+            })),
+          ],
+        },
+      },
+    });
   }
 
   remove(id: number) {
