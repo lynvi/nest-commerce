@@ -114,6 +114,9 @@ type Product {
   """product description"""
   description: String
 
+  """product long description"""
+  long_description: String
+
   """average variant  price"""
   price: String
 
@@ -449,6 +452,9 @@ input CreateBrandInput {
   """Brand logo"""
   logo: String!
 
+  """Brand website"""
+  website: String
+
   """Brand slug"""
   slug: String!
 }
@@ -462,6 +468,9 @@ input UpdateBrandInput {
 
   """Brand logo"""
   logo: String
+
+  """Brand website"""
+  website: String
 
   """Brand slug"""
   slug: String
@@ -482,6 +491,12 @@ input CreateCollectionInput {
   """collection name"""
   name: String!
 
+  """collection parent id"""
+  parentId: String
+
+  """collection parent id"""
+  position: Int = 0
+
   """collection desc"""
   description: String
 
@@ -492,6 +507,12 @@ input CreateCollectionInput {
 input UpdateCollectionInput {
   """collection name"""
   name: String
+
+  """collection parent id"""
+  parentId: String
+
+  """collection parent id"""
+  position: Int = 0
 
   """collection desc"""
   description: String
@@ -559,13 +580,13 @@ input CreateProductVariantInput {
   name: String!
 
   """Product reference"""
-  ref: String!
+  ref: String
 
   """Product variant description"""
   description: String!
 
   """Product variant image"""
-  featuredAsset: String!
+  featuredAsset: String
 
   """Product variant slug"""
   slug: String!
@@ -577,10 +598,10 @@ input CreateProductVariantInput {
   price: Int!
 
   """Product options"""
-  productOptions: [CreateProductOptionInput!]!
+  productOptions: [CreateProductOptionInput!]
 
   """Product variant sales price"""
-  salesPrice: Int!
+  salesPrice: Int
 
   """Product variant stocklevel"""
   stockLevel: Int!
@@ -624,7 +645,7 @@ input UpdateProductVariantInput {
 
   """Product variant stocklevel"""
   stockLevel: Int
-  id: Int!
+  id: ID!
 }
 
 input CreateCouponInput {
