@@ -7,7 +7,7 @@ export class CreateProductVariantInput {
   @Field(() => String, { description: 'Product variant name' })
   name: string;
 
-  @Field(() => String, { description: 'Product reference' })
+  @Field(() => String, { description: 'Product reference', nullable: true })
   ref: string;
   @Field(() => String, { description: 'Product variant description' })
   description: string;
@@ -24,10 +24,16 @@ export class CreateProductVariantInput {
   @Field(() => Int, { description: 'Product variant product id' })
   price: number;
 
-  @Field(() => [CreateProductOptionInput], { description: 'Product options' })
+  @Field(() => [CreateProductOptionInput], {
+    description: 'Product options',
+    nullable: true,
+  })
   productOptions: CreateProductOptionInput[];
 
-  @Field(() => Int, { description: 'Product variant sales price' })
+  @Field(() => Int, {
+    description: 'Product variant sales price',
+    nullable: true,
+  })
   salesPrice: number;
 
   @Field(() => Int, { description: 'Product variant stocklevel' })
