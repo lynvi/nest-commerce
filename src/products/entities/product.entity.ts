@@ -20,6 +20,12 @@ export class Product {
   description: string;
 
   @Field(() => String, {
+    description: 'product long description',
+    nullable: true,
+  })
+  long_description: string;
+
+  @Field(() => String, {
     description: 'average variant  price',
     nullable: true,
   })

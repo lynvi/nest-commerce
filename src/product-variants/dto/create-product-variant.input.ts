@@ -12,7 +12,7 @@ export class CreateProductVariantInput {
   @Field(() => String, { description: 'Product variant description' })
   description: string;
 
-  @Field(() => String, { description: 'Product variant image' })
+  @Field(() => String, { description: 'Product variant image', nullable: true })
   featuredAsset: string;
 
   @Field(() => String, { description: 'Product variant slug' })
