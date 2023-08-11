@@ -368,7 +368,8 @@ type Mutation {
   finalizeOrder: Order
   createProductVariant(createProductVariantInput: CreateProductVariantInput!): ProductVariant!
   updateProductVariant(updateProductVariantInput: UpdateProductVariantInput!): ProductVariant!
-  removeProductVariant(id: Int!): ProductVariant!
+  removeProductVariant(id: ID!): ProductVariant!
+  assignProductOptionToProductVariant(assignProductOptionToProductVariantInput: AssignProductOptionToProductVariantInput!): ProductVariant!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   updateCoupon(updateCouponInput: UpdateCouponInput!): Coupon!
   removeCoupon(id: Int!): Coupon!
@@ -637,6 +638,11 @@ input UpdateProductVariantInput {
   """Product variant stocklevel"""
   stockLevel: Int
   id: ID!
+}
+
+input AssignProductOptionToProductVariantInput {
+  productOptionId: ID!
+  productVariantId: ID!
 }
 
 input CreateCouponInput {

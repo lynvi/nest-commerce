@@ -8,3 +8,12 @@ export class UpdateProductVariantInput extends PartialType(
   @Field(() => ID)
   id: string;
 }
+
+@InputType()
+export class AssignProductOptionToProductVariantInput {
+  @Field(() => ID)
+  productOptionId: string;
+
+  @Field(() => ID)
+  productVariantId: string;
+}
