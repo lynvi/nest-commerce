@@ -83,9 +83,12 @@ export class ProductVariantsService {
     productOptionId: string,
     productVariantId: string,
   ) {
-    await this.prismaService.productVariant.update({
+    return await this.prismaService.productVariant.update({
+      include: {
+        productOptions: true,
+      },
       where: {
-        id: productOptionId,
+        id: productVariantId,
       },
       data: {
         productOptions: {
