@@ -18,9 +18,6 @@ export class ProductVariant {
   })
   description: string;
 
-  @Field(() => String, { description: 'Product variant slug', nullable: true })
-  slug: string;
-
   @Field(() => String, { description: 'Product variant sku', nullable: true })
   sku: string;
 

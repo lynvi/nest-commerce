@@ -59,9 +59,6 @@ type ProductVariant {
   """Product variant description"""
   description: String
 
-  """Product variant slug"""
-  slug: String
-
   """Product variant sku"""
   sku: String
 
@@ -588,9 +585,6 @@ input CreateProductVariantInput {
   """Product variant image"""
   featuredAsset: String
 
-  """Product variant slug"""
-  slug: String!
-
   """Product variant product id"""
   productId: String!
 
@@ -627,9 +621,6 @@ input UpdateProductVariantInput {
 
   """Product variant image"""
   featuredAsset: String
-
-  """Product variant slug"""
-  slug: String
 
   """Product variant product id"""
   productId: String

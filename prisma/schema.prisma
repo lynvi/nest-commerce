@@ -173,13 +173,12 @@ model Brand {
 
 model ProductVariant {
   id             String          @id @default(cuid())
-  ref            String
+  ref            String?
   name           String?
   featuredAsset  String?
   product        Product?        @relation(fields: [productId], references: [id])
   productId      String?
   price          Int             @default(0)
-  slug           String
   salesPrice     Int?
   stockLevel     Int             @default(1)
   sku            String?
