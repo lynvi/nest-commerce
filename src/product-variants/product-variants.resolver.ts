@@ -1,15 +1,23 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { ProductVariantsService } from './product-variants.service';
 import { ProductVariant } from './entities/product-variant.entity';
 import { CreateProductVariantInput } from './dto/create-product-variant.input';
-import { UpdateProductVariantInput } from './dto/update-product-variant.input';
+import {
+  AssignProductOptionToProductVariantInput,
+  UpdateProductVariantInput,
+} from './dto/update-product-variant.input';
 
 @Resolver(() => ProductVariant)
 export class ProductVariantsResolver {
-  constructor(private readonly productVariantsService: ProductVariantsService) {}
+  constructor(
+    private readonly productVariantsService: ProductVariantsService,
+  ) {}
 
   @Mutation(() => ProductVariant)
-  createProductVariant(@Args('createProductVariantInput') createProductVariantInput: CreateProductVariantInput) {
+  createProductVariant(
+    @Args('createProductVariantInput')
+    createProductVariantInput: CreateProductVariantInput,
+  ) {
     return this.productVariantsService.create(createProductVariantInput);
   }
 
@@ -24,12 +32,30 @@ export class ProductVariantsResolver {
   }
 
   @Mutation(() => ProductVariant)
-  updateProductVariant(@Args('updateProductVariantInput') updateProductVariantInput: UpdateProductVariantInput) {
-    return this.productVariantsService.update(updateProductVariantInput.id, updateProductVariantInput);
+  updateProductVariant(
+    @Args('updateProductVariantInput')
+    updateProductVariantInput: UpdateProductVariantInput,
+  ) {
+    return this.productVariantsService.update(
+      updateProductVariantInput.id,
+      updateProductVariantInput,
+    );
   }
 
   @Mutation(() => ProductVariant)
-  removeProductVariant(@Args('id', { type: () => Int }) id: number) {
+  removeProductVariant(@Args('id', { type: () => ID }) id: string) {
     return this.productVariantsService.remove(id);
+  }
+
+  @Mutation(() => ProductVariant)
+  assignProductOptionToProductVariant(
+    @Args('assignProductOptionToProductVariantInput')
+    updateProductInput: AssignProductOptionToProductVariantInput,
+  ) {
+    const { productOptionId, productVariantId } = updateProductInput;
+    return this.productVariantsService.assignProductOptionToProductVariant(
+      productOptionId,
+      productVariantId,
+    );
   }
 }

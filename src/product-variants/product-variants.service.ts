@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductVariantInput } from './dto/create-product-variant.input';
 import { UpdateProductVariantInput } from './dto/update-product-variant.input';
 import { PrismaService } from 'nestjs-prisma';
@@ -68,7 +68,35 @@ export class ProductVariantsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} productVariant`;
+  async remove(id: string) {
+    const pv = await this.prismaService.productVariant.findUniqueOrThrow({
+      where: { id },
+    });
+
+    if (!pv) {
+      throw new NotFoundException();
+    }
+    return this.prismaService.productVariant.delete({ where: { id } });
+  }
+
+  async assignProductOptionToProductVariant(
+    productOptionId: string,
+    productVariantId: string,
+  ) {
+    return await this.prismaService.productVariant.update({
+      include: {
+        productOptions: true,
+      },
+      where: {
+        id: productVariantId,
+      },
+      data: {
+        productOptions: {
+          set: {
+            id: productOptionId,
+          },
+        },
+      },
+    });
   }
 }
