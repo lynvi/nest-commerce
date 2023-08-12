@@ -20,6 +20,7 @@ import { ShippingDetailsModule } from './shipping-details/shipping-details.modul
 import { GlobalHttpModule } from './global-http.module';
 import { ProductOptionsModule } from './product-options/product-options.module';
 import { UploadsModule } from './uploads/uploads.module';
+import { ImageProcessingModule } from './image-processing/image-processing.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { UploadsModule } from './uploads/uploads.module';
     ShippingDetailsModule,
     ProductOptionsModule,
     UploadsModule,
+    ImageProcessingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
