@@ -3,11 +3,12 @@ import { Injectable } from '@nestjs/common';
 import * as stream from 'stream';
 import { Upload } from '@aws-sdk/lib-storage';
 import { MultipartFile } from '@fastify/multipart';
+import { ImageProcessingService } from 'src/image-processing/image-processing.service';
 
 @Injectable()
 export class UploadsService {
   client = null;
-  constructor() {
+  constructor(private imageProcessingService: ImageProcessingService) {
     this.client = new S3Client({
       endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
       credentials: {
@@ -19,6 +20,9 @@ export class UploadsService {
   }
 
   async uploadStream(readableStream: MultipartFile) {
+    const trimedPng = await this.imageProcessingService.trimImage(
+      await readableStream.toBuffer(),
+    );
     const Key = readableStream.filename;
     const Bucket = 'profit';
     const passThroughStream = new stream.PassThrough();
@@ -41,7 +45,7 @@ export class UploadsService {
         leavePartsOnError: false,
       });
 
-      readableStream.file.pipe(passThroughStream);
+      trimedPng.pipe(passThroughStream);
       res = await parallelUploads3.done();
     } catch (e) {
       console.log(e);
