@@ -200,6 +200,9 @@ export class OrdersService {
       ...select,
       where: { id: session.activeOrder.id },
       data: {
+        total: {
+          decrement: productVariant.price * input.quantity,
+        },
         orderLines:
           (quantity === 1 || quantity === input.quantity) === true
             ? {
