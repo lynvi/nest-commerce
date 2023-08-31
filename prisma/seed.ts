@@ -67,7 +67,7 @@ async function main() {
               name: variant?.name || product.name,
               description: product.description,
               salesPrice: variant?.salesPrice,
-              slug: slugify(product.slug),
+
               price: variant.price,
               stockLevel: variant.stockLevel,
               featuredAsset,

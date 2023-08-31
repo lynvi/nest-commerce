@@ -159,11 +159,74 @@ export class OrdersService {
       secure: true,
       httpOnly: false,
       sameSite: 'none',
-      domain: 'alphafit.ma',
+      // domain: 'alphafit.ma',
       // The path where the cookie is valid (in this case, the root path)
     });
 
     return order;
+  }
+  async removeFromCart(
+    input: AddToCartInput,
+    request: FastifyRequest,
+
+    info: GraphQLResolveInfo,
+  ) {
+    const select = new PrismaSelect(info).value;
+
+    const productVariant = await this.prismaService.productVariant.findUnique({
+      where: { id: input.productVariantId },
+    });
+
+    if (!productVariant) {
+      return new NotFoundException('Product variant not found');
+    }
+
+    const sessionId = request.cookies['session'];
+    let session = await this.prismaService.session.findUnique({
+      include: { activeOrder: { include: { orderLines: true } } },
+      where: { id: sessionId || '' },
+    });
+
+    const quantity =
+      session.activeOrder.orderLines.find(
+        (item) => item.productVariantId === input.productVariantId,
+      )?.quantity || 0;
+
+    if (quantity === 0) {
+      return new NotFoundException('Product variant not found zero quantity');
+    }
+
+    return await this.prismaService.order.update({
+      ...select,
+      where: { id: session.activeOrder.id },
+      data: {
+        orderLines:
+          (quantity === 1 || quantity === input.quantity) === true
+            ? {
+                disconnect: {
+                  orderId_productVariantId: {
+                    orderId: session.activeOrder.id,
+                    productVariantId: input.productVariantId,
+                  },
+                },
+              }
+            : {
+                update: {
+                  data: {
+                    quantity: {
+                      decrement: input.quantity,
+                    },
+                  },
+                  where: {
+                    orderId_productVariantId: {
+                      orderId: session.activeOrder.id,
+                      productVariantId: input.productVariantId,
+                    },
+                  },
+                },
+              },
+      },
+    });
   }
 
   async activeOrder(request: FastifyRequest, info: GraphQLResolveInfo) {

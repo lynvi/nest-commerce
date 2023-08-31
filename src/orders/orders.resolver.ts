@@ -62,6 +62,21 @@ export class OrdersResolver {
     );
   }
 
+  @Mutation(() => Order)
+  async removeFromCart(
+    @Context() context,
+    @Args('removeFromCartInput') removeFromCartInput: AddToCartInput,
+    @Info() info: GraphQLResolveInfo,
+  ) {
+    const request = context.req as FastifyRequest;
+
+    return await this.ordersService.removeFromCart(
+      removeFromCartInput,
+      request,
+      info,
+    );
+  }
+
   @Mutation(() => Order, { nullable: true })
   async addCustomerToOrder(
     @Context() context,

@@ -363,6 +363,7 @@ type Mutation {
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: String!): Order!
   addToCart(addToCartInput: AddToCartInput!): Order!
+  removeFromCart(removeFromCartInput: AddToCartInput!): Order!
   addCustomerToOrder(addCustomerToOrderInput: AddCustomerToOrderInput!): Order
   addShippngToOrder(addShippingToOrderInput: AddShippingToOrderInput!): Order
   finalizeOrder: Order
