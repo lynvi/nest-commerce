@@ -159,7 +159,8 @@ export class OrdersService {
       secure: true,
       httpOnly: false,
       sameSite: 'none',
-      // domain: 'alphafit.ma',
+      domain:
+        process.env.NODE_ENV === 'production' ? 'alphafit.ma' : 'localhost',
       // The path where the cookie is valid (in this case, the root path)
     });
 
