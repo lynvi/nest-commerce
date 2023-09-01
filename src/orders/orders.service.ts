@@ -237,8 +237,20 @@ export class OrdersService {
     const sessionId = request.cookies['session'];
 
     const select = new PrismaSelect(info).value;
+    const { orderLines, ...rest } = select.select;
+
     const session = await this.prismaService.session.findUnique({
-      include: { activeOrder: { ...select } },
+      include: {
+        activeOrder: {
+          select: {
+            ...rest,
+            orderLines: {
+              select: orderLines.select,
+              orderBy: { createdAt: 'asc' },
+            },
+          },
+        },
+      },
       where: { id: sessionId || '' },
     });
 
