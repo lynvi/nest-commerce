@@ -29,7 +29,7 @@ export class CreateProductVariantInput {
 
   @Field(() => Int, {
     description: 'Product variant sales price',
-    nullable: true,
+    nullable: false,
   })
   salesPrice: number;
 
