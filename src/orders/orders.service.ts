@@ -101,7 +101,7 @@ export class OrdersService {
               productVariantId: addToCartInput.productVariantId,
             },
           },
-          total: productVariant.price * addToCartInput.quantity,
+          total: productVariant.salesPrice * addToCartInput.quantity,
         },
 
         update: {
@@ -122,7 +122,9 @@ export class OrdersService {
               },
             },
           },
-          total: { increment: productVariant.price * addToCartInput.quantity },
+          total: {
+            increment: productVariant.salesPrice * addToCartInput.quantity,
+          },
         },
       });
     }
@@ -144,7 +146,7 @@ export class OrdersService {
           },
         },
 
-        total: productVariant.price * addToCartInput.quantity,
+        total: productVariant.salesPrice * addToCartInput.quantity,
       },
     });
 
@@ -202,7 +204,7 @@ export class OrdersService {
       where: { id: session.activeOrder.id },
       data: {
         total: {
-          decrement: productVariant.price * input.quantity,
+          decrement: productVariant.salesPrice * input.quantity,
         },
         orderLines:
           (quantity === 1 || quantity === input.quantity) === true
