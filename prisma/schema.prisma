@@ -102,7 +102,7 @@ model Product {
   featuredAsset String?
   assets        Asset[]
   price         Int?    @default(0)
-  salesPrice    Int?    @default(0)
+  salesPrice    Int     @default(0)
 
   productVariants ProductVariant[]
 
