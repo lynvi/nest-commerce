@@ -18,7 +18,7 @@ export class AppService {
     ██   ██ ███████ ██      ██   ██ ██   ██ ██      ██    ██    ██ ██      ██ ██   ██      ██████  ██   ██ ██   ██ ██      ██   ██  ██████  ███████     ██   ██ ██      ██     
                                                                                                                                        ▀▀                                      
 
-    alphafit.ma is built using a beta version of headless ecommerce graphql api built using NestJS , Postgres (or plug in any database supported by prisma) , Prisma ORM , Graphql ,\n    Fastify x Mercuris server  \n\n\n    Built with love in Morocco 🇲🇦 🚀                                                                                                                    
+    alphafit.ma is built using a beta version of headless ecommerce graphql api built using NestJS , Postgres (or plug in any database supported by prisma) , Prisma ORM , Graphql ,\n    Fastify x Mercuris server  \n\n\n    Built with love in Morocco <> 🇲🇦 🚀                                                                                                                    
                                                                                                                                                                                
     `;
   }

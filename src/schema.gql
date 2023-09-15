@@ -297,7 +297,7 @@ type Query {
   activeOrder: Order
   orderByCode(orderCode: String!): Order
   productVariants: [ProductVariant!]!
-  productVariant(id: Int!): ProductVariant!
+  productVariant(id: String!): ProductVariant!
   coupons: [Coupon!]!
   coupon(id: Int!): Coupon!
   users: [User!]!
