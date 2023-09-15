@@ -597,7 +597,7 @@ input CreateProductVariantInput {
   productOptions: [CreateProductOptionInput!]
 
   """Product variant sales price"""
-  salesPrice: Int
+  salesPrice: Int!
 
   """Product variant stocklevel"""
   stockLevel: Int!
