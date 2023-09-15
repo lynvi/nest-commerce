@@ -49,6 +49,7 @@ async function main() {
     await prisma.product.create({
       data: {
         ...product,
+        salesPrice: product.price - 10,
 
         collections: {
           connect: [...collectionIds.map((item) => ({ id: item }))],
@@ -66,7 +67,7 @@ async function main() {
               ref: Math.floor(10000000 + Math.random() * 90000000) + '',
               name: variant?.name || product.name,
               description: product.description,
-              salesPrice: variant?.salesPrice,
+              salesPrice: variant?.price - 10,
 
               price: variant.price,
               stockLevel: variant.stockLevel,

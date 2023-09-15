@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductVariantInput } from './dto/create-product-variant.input';
 import { UpdateProductVariantInput } from './dto/update-product-variant.input';
 import { PrismaService } from 'nestjs-prisma';
+import { GraphQLResolveInfo } from 'graphql';
+import { PrismaSelect } from '@paljs/plugins';
 
 @Injectable()
 export class ProductVariantsService {
@@ -34,8 +36,12 @@ export class ProductVariantsService {
     return `This action returns all productVariants`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} productVariant`;
+  findOne(id: string, info: GraphQLResolveInfo) {
+    const select = new PrismaSelect(info).value;
+    return this.prismaService.productVariant.findFirst({
+      where: { id },
+      ...select,
+    });
   }
 
   update(id: string, updateProductVariantInput: UpdateProductVariantInput) {
