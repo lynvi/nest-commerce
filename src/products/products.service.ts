@@ -121,11 +121,22 @@ export class ProductsService {
     updateProductInput: UpdateProductInput,
     info: GraphQLResolveInfo,
   ) {
+    const { collectionIds, ...input } = updateProductInput;
+
     const select = new PrismaSelect(info).value;
     return this.prismaService.product.update({
       where: { id },
       ...select,
-      data: updateProductInput,
+      data: {
+        ...input,
+        collections: {
+          set: [
+            ...collectionIds?.map((collectionId) => ({
+              id: collectionId,
+            })),
+          ],
+        },
+      },
     });
   }
 
